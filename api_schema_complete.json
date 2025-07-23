@@ -1,0 +1,5885 @@
+{
+  "api_name": "SkuVault API",
+  "version": "1.0",
+  "base_url": "https://app.skuvault.com/api",
+  "authentication": {
+    "type": "custom",
+    "description": "All endpoints require TenantToken and UserToken in the request body",
+    "tokens": {
+      "TenantToken": {
+        "description": "Unique identifier for the SkuVault account",
+        "required": true,
+        "in": "body"
+      },
+      "UserToken": {
+        "description": "User-specific authentication token",
+        "required": true,
+        "in": "body"
+      }
+    },
+    "obtain_tokens_endpoint": "/getTokens"
+  },
+  "headers": {
+    "Content-Type": "application/json",
+    "Accept": "application/json"
+  },
+  "categories": {
+    "products": {
+      "name": "Products",
+      "description": "Products related endpoints",
+      "endpoints": [
+        "additem",
+        "additembulk",
+        "createkit",
+        "createlot",
+        "createproduct",
+        "createproducts",
+        "getincomingitems",
+        "getitemquantities",
+        "getkitquantities",
+        "getkits",
+        "getproduct",
+        "getproducts",
+        "getsaleitemcost",
+        "getsolditems",
+        "getwarehouseitemquantities",
+        "getwarehouseitemquantity",
+        "pickitem",
+        "pickitembulk",
+        "receivepoitems",
+        "removeitem",
+        "removeitembulk",
+        "setitemquantities",
+        "setitemquantity",
+        "syncshippedsaleandremoveitems",
+        "syncshippedsaleandremoveitemsbulk",
+        "updatealtskuscodes",
+        "updateproduct",
+        "updateproducts"
+      ]
+    },
+    "sales": {
+      "name": "Sales",
+      "description": "Sales related endpoints",
+      "endpoints": [
+        "addshipments",
+        "getonlinesalestatus",
+        "getsales",
+        "getsalesbydate",
+        "getshipments",
+        "synconlinesale",
+        "synconlinesales",
+        "updateonlinesalestatus",
+        "updateshipments"
+      ]
+    },
+    "settings": {
+      "name": "Settings",
+      "description": "Settings related endpoints",
+      "endpoints": [
+        "createbrands",
+        "getbrands",
+        "getclassifications",
+        "getintegrations"
+      ]
+    },
+    "general": {
+      "name": "General",
+      "description": "General related endpoints",
+      "endpoints": [
+        "createholds",
+        "getavailablequantities",
+        "gethandlingtime",
+        "getlots",
+        "getreceiveshistory",
+        "getserialnumbers",
+        "gettokens",
+        "gettransactions",
+        "releaseheldquantities",
+        "updatehandlingtime"
+      ]
+    },
+    "purchasing": {
+      "name": "Purchasing",
+      "description": "Purchasing related endpoints",
+      "endpoints": [
+        "createpo",
+        "createsuppliers",
+        "getpos",
+        "getsuppliers",
+        "updatepos"
+      ]
+    },
+    "inventory": {
+      "name": "Inventory",
+      "description": "Inventory related endpoints",
+      "endpoints": [
+        "getexternalwarehousequantities",
+        "getexternalwarehouses",
+        "getinventorybylocation",
+        "getlocations",
+        "getlotinventorybylocation",
+        "getwarehouses"
+      ]
+    }
+  },
+  "endpoints": {
+    "additem": {
+      "title": "/addItem",
+      "method": "post",
+      "url": "/addItem",
+      "category": "inventory",
+      "description": "",
+      "parameters": [
+        {
+          "name": "Sku",
+          "type": "string",
+          "description": "Product SKU. Used when CODE is blank.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Code",
+          "type": "string",
+          "description": "Product CODE. Used when SKU is blank.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "WarehouseId",
+          "type": "int",
+          "description": "*from [getWarehouses](doc:getwarehouses)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "LocationCode",
+          "type": "string",
+          "description": "The warehouse location inventory will be added to.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "ScannedCode",
+          "type": "string",
+          "description": "This field is obligatory if adding qty to a lotted product, need to put lot#",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Quantity",
+          "type": "int",
+          "description": "Quantity to add.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Reason",
+          "type": "string",
+          "description": "Transaction reason must exist in SkuVault",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Note",
+          "type": "string",
+          "description": "Transaction Note",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "SerialNumbers",
+          "type": "array_string",
+          "description": "Serial Numbers. Required only for serialized products. Amount of Serial Numbers should correspond to the Quantity.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "TenantToken",
+          "type": "string",
+          "description": "*from [getTokens](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "UserToken",
+          "type": "string",
+          "description": "*from [getTokens](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        }
+      ],
+      "response_fields": [],
+      "source_file": "additem.html"
+    },
+    "additembulk": {
+      "title": "/addItemBulk",
+      "method": "post",
+      "url": "/addItemBulk",
+      "category": "products",
+      "description": "",
+      "parameters": [
+        {
+          "name": "Items",
+          "type": "array_object",
+          "description": "Max 100",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Items.Sku",
+          "type": "string",
+          "description": "Product SKU. Required if CODE is omitted.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Items.Code",
+          "type": "string",
+          "description": "Product code.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Items.WarehouseId",
+          "type": "int",
+          "description": "*from [getWarehouses](doc:getwarehouses)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Items.ScannedCode",
+          "type": "string",
+          "description": "This field is obligatory if adding qty to a lotted product, need to put lot#",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Items.LocationCode",
+          "type": "string",
+          "description": "",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Items.Quantity",
+          "type": "int",
+          "description": "",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Items.Reason",
+          "type": "string",
+          "description": "Transaction reason must exist in SkuVault",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Items.Note",
+          "type": "string",
+          "description": "Transaction note",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Items.SerialNumbers",
+          "type": "array_string",
+          "description": "Serial Numbers. Required only for serialized products. Amount of Serial Numbers should correspond to the Quantity.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "TenantToken",
+          "type": "string",
+          "description": "*from [getTokens](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "UserToken",
+          "type": "string",
+          "description": "*from [getTokens](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        }
+      ],
+      "response_fields": [],
+      "source_file": "additembulk.html"
+    },
+    "addshipments": {
+      "title": "/addShipments",
+      "method": "post",
+      "url": "/addShipments",
+      "category": "sales",
+      "description": "",
+      "parameters": [
+        {
+          "name": "Shipments",
+          "type": "object",
+          "description": "List of Shipments",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Shipments.SaleId",
+          "type": "string",
+          "description": "If provided, the Sale ID must exist in SkuVault",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Shipments.Source",
+          "type": "string",
+          "description": "Where the shipping information came from.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Shipments.TrackingNumber",
+          "type": "string",
+          "description": "The unique identifier for a shipment from a particular Carrier.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Shipments.Carrier",
+          "type": "string",
+          "description": "The shipping company responsible for taking the delivery from Point A to Point B.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Shipments.Class",
+          "type": "string",
+          "description": "The level of service the carrier was paid for.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Shipments.Type",
+          "type": "string",
+          "description": "The type of Shipment that is being transported to/from the warehouse. Accepts: \"Fulfillment\", \"Return\", \"Exchange\", \"Replacement\", \"Warranty\"",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Shipments.Status",
+          "type": "string",
+          "description": "\"Created\" means the Shipment has been given a tracking number. \"Voided\" will void the Shipment.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Shipments.AlternateId",
+          "type": "string",
+          "description": "Alternate ID",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Shipments.ManifestId",
+          "type": "string",
+          "description": "A list of Shipments",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Shipments.Note",
+          "type": "string",
+          "description": "A note for the shipment.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Shipments.TotalWeight",
+          "type": "double",
+          "description": "Accepts decimal. This is the total weight of the shipment including all parcels in the shipment.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Shipments.WeightUnit",
+          "type": "string",
+          "description": "Units for the weight measurement. Accepts: \"g\", \"oz\", \"lbs\", \"kgs\"",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Shipments.TrackingUrl",
+          "type": "string",
+          "description": "The URL where the Carrier provides tracking information for the shipment.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Shipments.CreatedDate",
+          "type": "datetime",
+          "description": "Date and Time that the shipment was created.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Shipments.EstimatedShipDate",
+          "type": "datetime",
+          "description": "At time of shipment, when order is expected to be picked up by the carrier.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Shipments.EstimatedDeliveryDate",
+          "type": "datetime",
+          "description": "At time of shipment, when order is expected to deliver.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Shipments.ShippedFrom",
+          "type": "object",
+          "description": "Where the shipment was picked up by the Carrier / Shipped from.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Shipments.ShippedFrom.WarehouseId",
+          "type": "string",
+          "description": "Warehouse ID. The ID must exist in SkuVault. If Shipments.ShippedFrom.Is3PL is \"true\", ID must belong to an external warehouse.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Shipments.ShippedFrom.Is3PL",
+          "type": "boolean",
+          "description": "True or False",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Shipments.ShippedFrom.Address",
+          "type": "object",
+          "description": "Address where the Shipment is coming from.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Shipments.ShippedFrom.Address.FirstName",
+          "type": "string",
+          "description": "First Name",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Shipments.ShippedFrom.Address.LastName",
+          "type": "string",
+          "description": "Last Name",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Shipments.ShippedFrom.Address.MiddleName",
+          "type": "string",
+          "description": "Middle Name",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Shipments.ShippedFrom.Address.Company",
+          "type": "string",
+          "description": "Company",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Shipments.ShippedFrom.Address.Email",
+          "type": "string",
+          "description": "Email",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Shipments.ShippedFrom.Address.Address1",
+          "type": "string",
+          "description": "Address 1",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Shipments.ShippedFrom.Address.Address2",
+          "type": "string",
+          "description": "Address 2",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Shipments.ShippedFrom.Address.City",
+          "type": "string",
+          "description": "City",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Shipments.ShippedFrom.Address.Region",
+          "type": "string",
+          "description": "Region",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Shipments.ShippedFrom.Address.Country",
+          "type": "string",
+          "description": "Country",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Shipments.ShippedFrom.Address.PostalCode",
+          "type": "string",
+          "description": "Postal Code",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Shipments.Costs",
+          "type": "array_object",
+          "description": "The various costs associated with a Shipment type",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Shipments.Costs.CostType",
+          "type": "string",
+          "description": "The type of Shipping Cost appended to the shipment. Accepts: \"Transportation\", \"Insurance\", \"Sales tax\", \"Gift Wrap\", \"Recycling Fee\", \"VAT Shipping\", \"VAT Gift Wrap\", \"Import Shipping\", \"Import Tax\", \"ThreePL\"",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Shipments.Costs.Amount",
+          "type": "double",
+          "description": "The Amount value of the Cost. Accepts decimals.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Shipments.Costs.CurrencyIsoCode",
+          "type": "string",
+          "description": "The type of currency associated with the cost.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Shipments.Parcels",
+          "type": "array_object",
+          "description": "List of one or more parcels within the shipment.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Shipments.Parcels.Number",
+          "type": "int",
+          "description": "The parcel number for each individual parcel.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Shipments.Parcels.Weight",
+          "type": "double",
+          "description": "Accepts decimals. The total weight of the parcel.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Shipments.Parcels.WeightUnit",
+          "type": "string",
+          "description": "The unit of measurement used. Accepts: \"g\", \"oz\", \"lbs\", \"kgs\".",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Shipments.Parcels.Note",
+          "type": "string",
+          "description": "Note for the Parcel.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Shipments.Parcels.Items",
+          "type": "array_object",
+          "description": "List of items and quantities in the shipment.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Shipments.Parcels.Items.Sku",
+          "type": "string",
+          "description": "Sku for the item.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Shipments.Parcels.Items.Quantity",
+          "type": "int",
+          "description": "Number of items associated with that SKU.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Shipments.Parcels.Dimensions",
+          "type": "object",
+          "description": "Various dimensions of the parcel.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Shipments.Parcels.Dimensions.Height",
+          "type": "double",
+          "description": "Height. Accepts decimals.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Shipments.Parcels.Dimensions.Width",
+          "type": "double",
+          "description": "Width. Accepts decimals.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Shipments.Parcels.Dimensions.Length",
+          "type": "double",
+          "description": "Length. Accepts decimals.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Shipments.Parcels.Dimensions.Unit",
+          "type": "string",
+          "description": "Unit of Measurement. Accepts: \"in\", \"ft\", \"yd\", \"mm\", \"cm\", \"m\".",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Shipments.LandedCosts",
+          "type": "array_object",
+          "description": "The total cost a line item is responsible for.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Shipments.LandedCosts.Sku",
+          "type": "string",
+          "description": "SKU",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Shipments.LandedCosts.Amount",
+          "type": "int",
+          "description": "Cost value of SKU item.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Shipments.LandedCosts.CurrencyIsoCode",
+          "type": "string",
+          "description": "Type of Currency for Amount",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "TenantToken",
+          "type": "string",
+          "description": "Tenant Token to access account",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "UserToken",
+          "type": "string",
+          "description": "User Token to access account",
+          "required": true,
+          "default": ""
+        }
+      ],
+      "response_fields": [],
+      "source_file": "addshipments.html"
+    },
+    "createbrands": {
+      "title": "/createBrands",
+      "method": "post",
+      "url": "/createBrands",
+      "category": "settings",
+      "description": "",
+      "parameters": [
+        {
+          "name": "Brands",
+          "type": "array_object",
+          "description": "Brands to be created, max 100",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Brands.Name",
+          "type": "string",
+          "description": "Name of Brand",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "TenantToken",
+          "type": "string",
+          "description": "*from [getTokens.](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "UserToken",
+          "type": "string",
+          "description": "*from [getTokens.](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        }
+      ],
+      "response_fields": [],
+      "source_file": "createbrands.html"
+    },
+    "createholds": {
+      "title": "/createHolds",
+      "method": "post",
+      "url": "/createHolds",
+      "category": "general",
+      "description": "",
+      "parameters": [
+        {
+          "name": "Holds",
+          "type": "array_object",
+          "description": "Contains your list of SKUs & hold parameters.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Holds.Sku",
+          "type": "string",
+          "description": "The SKU to place on hold.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Holds.Quantity",
+          "type": "int",
+          "description": "The quantity.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Holds.ExpirationDateUtc",
+          "type": "datetime",
+          "description": "When this hold expires",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Holds.Description",
+          "type": "string",
+          "description": "A description of the hold, eg: \"Summer Flash Sale\"",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "TenantToken",
+          "type": "string",
+          "description": "*from [getTokens](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "UserToken",
+          "type": "string",
+          "description": "*from [getTokens](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        }
+      ],
+      "response_fields": [],
+      "source_file": "createholds.html"
+    },
+    "createkit": {
+      "title": "/createKit",
+      "method": "post",
+      "url": "/createKit",
+      "category": "products",
+      "description": "",
+      "parameters": [
+        {
+          "name": "Sku",
+          "type": "string",
+          "description": "Kit SKU",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Title",
+          "type": "string",
+          "description": "Kit Title",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Code",
+          "type": "string",
+          "description": "Kit Code. Will be autogenerated if parameter is not included or if value is blank.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "KitLines",
+          "type": "array_object",
+          "description": "Kit Line Items; Max 500 lines per kit.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "KitLines.LineName",
+          "type": "string",
+          "description": "The name of the line for internal use.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "KitLines.Combine",
+          "type": "string",
+          "description": "Substitute combine option. 1) Use up by priority. 2) Use single SKU if possible. 3) Never combine.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "KitLines.Quantity",
+          "type": "string",
+          "description": "The quantity of the line item.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "KitLines.Items",
+          "type": "array_string",
+          "description": "List of Codes or SKUs that make up the line. More that one indicates substitutes.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "AllowCreateAp",
+          "type": "boolean",
+          "description": "If true, will allow kit creation if a product with the same SKU exists, turning the product into an Assembled Product.",
+          "required": false,
+          "default": "False"
+        },
+        {
+          "name": "TenantToken",
+          "type": "string",
+          "description": "*from [getTokens.](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "UserToken",
+          "type": "string",
+          "description": "*from [getTokens.](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        }
+      ],
+      "response_fields": [],
+      "source_file": "createkit.html"
+    },
+    "createlot": {
+      "title": "/createLot",
+      "method": "post",
+      "url": "https://app.skuvault.com/api/products/CreateLot",
+      "category": "products",
+      "description": "",
+      "parameters": [
+        {
+          "name": "LotNumber",
+          "type": "string",
+          "description": "",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "ProductIds",
+          "type": "array_int",
+          "description": "Can be obtained trough /getProducts endpoint. In case Multilot Feature is disabled, you can only add a single productId",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "ExpirationDate",
+          "type": "string",
+          "description": "formatted as \u201c2016-01-01T00:00:00.0000000Z\u201d, Utc",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "ExternalId",
+          "type": "string",
+          "description": "\"Can be left blank\"",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "CreatedDate",
+          "type": "string",
+          "description": "If left in blank it sets automatically on todays date",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Note",
+          "type": "string",
+          "description": "Can be left blank",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "TenantToken",
+          "type": "string",
+          "description": "",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "UserToken",
+          "type": "string",
+          "description": "",
+          "required": true,
+          "default": ""
+        }
+      ],
+      "response_fields": [],
+      "source_file": "createlot.html"
+    },
+    "createpo": {
+      "title": "/createPO",
+      "method": "post",
+      "url": "/createPO",
+      "category": "purchasing",
+      "description": "",
+      "parameters": [
+        {
+          "name": "PoNumber",
+          "type": "string",
+          "description": "The number you wish to give this PO. If not provided, will automatically be generated.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "SupplierName",
+          "type": "string",
+          "description": "The vendor you are purchasing from.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "OrderDate",
+          "type": "datetime",
+          "description": "The date the PO was placed.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "TermsName",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "OrderCancelDate",
+          "type": "datetime",
+          "description": "The date you wish to cancel the PO on if it has not been received.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Payments",
+          "type": "array_object",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Payments.PaymentName",
+          "type": "string",
+          "description": "Only accepted values are \"Shipping\" or \"Tax\".",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Payments.Amount",
+          "type": "double",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Payments.Note",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "SentStatus",
+          "type": "string",
+          "description": "Sent Status - NotSent, Sent, and NeedToResend",
+          "required": false,
+          "default": "NotSent"
+        },
+        {
+          "name": "PaymentStatus",
+          "type": "string",
+          "description": "Payment Status - NonePaid, PartiallyPaid, and FullyPaid",
+          "required": false,
+          "default": "NonePaid"
+        },
+        {
+          "name": "ShippingCarrierClass",
+          "type": "object",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "ShippingCarrierClass.Carrier",
+          "type": "string",
+          "description": "The shipping carrier.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "ShippingCarrierClass.Class",
+          "type": "string",
+          "description": "The shipping class.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "ShipToWarehouse",
+          "type": "string",
+          "description": "This is the code of the warehouse in SkuVault. You can specify a warehouse that PO is for.",
+          "required": false,
+          "default": "N/A"
+        },
+        {
+          "name": "ShipToAddress",
+          "type": "string",
+          "description": "This is the Address Name of the warehouse in SkuVault. The address must exist for the ShipToWarehouse.",
+          "required": false,
+          "default": "N/A"
+        },
+        {
+          "name": "ArrivalDueDate",
+          "type": "datetime",
+          "description": "The date the PO is expected to arrive.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "RequestedShipDate",
+          "type": "datetime",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "TrackingInfo",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "PublicNotes",
+          "type": "string",
+          "description": "Notes for use on the PO template.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "PrivateNotes",
+          "type": "string",
+          "description": "Notes for internal use only.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "LineItems",
+          "type": "array_object",
+          "description": "At least one line item is required.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "LineItems.SKU",
+          "type": "string",
+          "description": "The SKU you are purchasing.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "LineItems.Quantity",
+          "type": "int",
+          "description": "The total quantity of the SKU you are purchasing.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "LineItems.QuantityTo3PL",
+          "type": "int",
+          "description": "The quantity of the SKU you are sending to 3PL.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "LineItems.Cost",
+          "type": "double",
+          "description": "The cost of the SKU you are purchasing. If left blank, it will use the Supplier's Cost if the supplier is Active. Otherwise it will use the product's default cost (Product Cost Field).",
+          "required": false,
+          "default": "Active supplier cost if available."
+        },
+        {
+          "name": "LineItems.PrivateNotes",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "LineItems.PublicNotes",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "LineItems.Variant",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "LineItems.Identifier",
+          "type": "string",
+          "description": "Any other identifier used for the item.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "TenantToken",
+          "type": "string",
+          "description": "*from [getTokens](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "UserToken",
+          "type": "string",
+          "description": "*from [getTokens](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        }
+      ],
+      "response_fields": [],
+      "source_file": "createpo.html"
+    },
+    "createproduct": {
+      "title": "/createProduct",
+      "method": "post",
+      "url": "/createProduct",
+      "category": "products",
+      "description": "",
+      "parameters": [
+        {
+          "name": "Sku",
+          "type": "string",
+          "description": "The SKU to give the product..",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Description",
+          "type": "string",
+          "description": "This is the \"Title\" of your product.",
+          "required": false,
+          "default": "null"
+        },
+        {
+          "name": "ShortDescription",
+          "type": "string",
+          "description": "Limit 1000 characters",
+          "required": false,
+          "default": "null"
+        },
+        {
+          "name": "LongDescription",
+          "type": "string",
+          "description": "Limit 65665 characters.",
+          "required": false,
+          "default": "null"
+        },
+        {
+          "name": "Classification",
+          "type": "string",
+          "description": "Must exist in SkuVault.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Supplier",
+          "type": "string",
+          "description": "Primary Supplier for the product. Supplier must exist in SkuVault.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Brand",
+          "type": "string",
+          "description": "Must exist in SkuVault.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Code",
+          "type": "string",
+          "description": "Barcode number.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "PartNumber",
+          "type": "string",
+          "description": "Manufacturer part number.",
+          "required": false,
+          "default": "null"
+        },
+        {
+          "name": "Cost",
+          "type": "double",
+          "description": "Accepts decimal; Your overall cost on hand for that product. Used for a default (fallback) cost field or for the cost averaging feature in SkuVault.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "SalePrice",
+          "type": "mixed",
+          "description": "Accepts decimal; Your selling price per unit",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "RetailPrice",
+          "type": "double",
+          "description": "Accepts decimal; MSRP per unit",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Weight",
+          "type": "double",
+          "description": "Accepts decimal",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "WeightUnit",
+          "type": "string",
+          "description": "One of: \"lbs\", \"kgs\", \"oz\", \"g\"",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "VariationParentSku",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "ReorderPoint",
+          "type": "int",
+          "description": "The point at which you should reorder quantity.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "MinimumOrderQuantity",
+          "type": "int",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "MinimumOrderQuantityInfo",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Note",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Statuses",
+          "type": "array_string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Pictures",
+          "type": "array_string",
+          "description": "List of picture urls",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Attributes",
+          "type": "object",
+          "description": "Dictionary where key is attribute name and value is attribute value",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "AllowCreateAp",
+          "type": "boolean",
+          "description": "Creates an Assembled Product if the kit already exists.",
+          "required": false,
+          "default": "False"
+        },
+        {
+          "name": "SupplierInfo",
+          "type": "array_object",
+          "description": "Array that houses supplier information.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "SupplierInfo.SupplierName",
+          "type": "string",
+          "description": "The name of your supplier in SkuVault. It must exist in SkuVault and at least one supplier is required.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "SupplierInfo.isPrimary",
+          "type": "boolean",
+          "description": "At least 1 supplier must be specified as primary (true).",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "SupplierInfo.Cost",
+          "type": "double",
+          "description": "This is the supplier's cost for that item.",
+          "required": false,
+          "default": "0"
+        },
+        {
+          "name": "SupplierInfo.SupplierPartNumber",
+          "type": "string",
+          "description": "Supplier's part number for that product. It is blank by default.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "SupplierInfo.LeadTime",
+          "type": "int",
+          "description": "Supplier's lead time.",
+          "required": false,
+          "default": "0"
+        },
+        {
+          "name": "SupplierInfo.isActive",
+          "type": "boolean",
+          "description": "If a supplier is active, we will use the supplier information (Cost, Supplier Part Number, etc.) when creating a Purchase Order.",
+          "required": false,
+          "default": "False"
+        },
+        {
+          "name": "IsSerialized",
+          "type": "boolean",
+          "description": "If true, creates serialized product.",
+          "required": false,
+          "default": "false"
+        },
+        {
+          "name": "TenantToken",
+          "type": "string",
+          "description": "*from [getTokens.](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "UserToken",
+          "type": "string",
+          "description": "*from [getTokens.](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Client",
+          "type": "string",
+          "description": "Only active clients, must exists in UI",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "IsLotted",
+          "type": "boolean",
+          "description": "",
+          "required": false,
+          "default": "false"
+        },
+        {
+          "name": "LotPriority",
+          "type": "string",
+          "description": "If \"IsLotted\" is set as true, field can't be left empty, possible options Global,FIFO,FEFO,LIFO",
+          "required": false,
+          "default": ""
+        }
+      ],
+      "response_fields": [],
+      "source_file": "createproduct.html"
+    },
+    "createproducts": {
+      "title": "/createProducts",
+      "method": "post",
+      "url": "/createProducts",
+      "category": "products",
+      "description": "",
+      "parameters": [
+        {
+          "name": "Items",
+          "type": "array_object",
+          "description": "List of SKUs to create as products. Max 100 per call.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Items.Sku",
+          "type": "string",
+          "description": "The SKU to give your product.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Items.Description",
+          "type": "string",
+          "description": "Now known as \"Title\" in the UI.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Items.ShortDescription",
+          "type": "string",
+          "description": "Limit 1000 characters.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Items.LongDescription",
+          "type": "string",
+          "description": "Limit 65665 characters.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Items.Classification",
+          "type": "string",
+          "description": "Must exist in SkuVault.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Items.Supplier",
+          "type": "string",
+          "description": "Primary Supplier for the product. Supplier must exist in SkuVault.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Items.Brand",
+          "type": "string",
+          "description": "Must exist in SkuVault.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Items.Code",
+          "type": "string",
+          "description": "Barcode number.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Items.PartNumber",
+          "type": "string",
+          "description": "Manufacturer part number.",
+          "required": false,
+          "default": "null"
+        },
+        {
+          "name": "Items.Cost",
+          "type": "double",
+          "description": "Accepts decimal; Your overall cost on hand for that product. Used for a default (fallback) cost field or for the cost averaging feature in SkuVault.",
+          "required": false,
+          "default": "0.00000"
+        },
+        {
+          "name": "Items.SalePrice",
+          "type": "double",
+          "description": "Accepts decimal; Your selling price per unit",
+          "required": false,
+          "default": "0.00000"
+        },
+        {
+          "name": "Items.RetailPrice",
+          "type": "double",
+          "description": "Accepts decimal; MSRP per unit",
+          "required": false,
+          "default": "0.00000"
+        },
+        {
+          "name": "Items.Weight",
+          "type": "double",
+          "description": "Accepts decimal.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Items.WeightUnit",
+          "type": "string",
+          "description": "One of: \"lbs\", \"kgs\", \"oz\", \"g\"",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Items.VariationParentSku",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Items.ReorderPoint",
+          "type": "int",
+          "description": "The point at which you should reorder quantity.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Items.MinimumOrderQuantity",
+          "type": "int",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Items.MinimumOrderQuantityInfo",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Items.Note",
+          "type": "string",
+          "description": "A note to place on the SKU.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Items.Statuses",
+          "type": "array_string",
+          "description": "Attach tags or statuses to this SKU. The status must exist in SkuVault.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Items.Pictures",
+          "type": "array_string",
+          "description": "List of picture urls.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Items.Attributes",
+          "type": "object",
+          "description": "Dictionary list where AttributeName is key, AttributeValue is value. AttributeName must exist under Classification.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Items.AllowCreateAp",
+          "type": "boolean",
+          "description": "Creates an Assembled Product if the kit already exists.",
+          "required": false,
+          "default": "false"
+        },
+        {
+          "name": "Items.SupplierInfo",
+          "type": "array_object",
+          "description": "Array that houses supplier information.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Items.SupplierInfo.SupplierName",
+          "type": "string",
+          "description": "The name of your supplier in SkuVault. It must exist in SkuVault and at least one supplier is required.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Items.SupplierInfo.SupplierPartNumber",
+          "type": "string",
+          "description": "Supplier's part number for that product. It is blank by default.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Items.SupplierInfo.Cost",
+          "type": "double",
+          "description": "This is the supplier's cost for that item.",
+          "required": false,
+          "default": "0.00000"
+        },
+        {
+          "name": "Items.SupplierInfo.LeadTime",
+          "type": "int",
+          "description": "Supplier's lead time.",
+          "required": false,
+          "default": "0"
+        },
+        {
+          "name": "Items.SupplierInfo.isActive",
+          "type": "boolean",
+          "description": "If a supplier is active, we will use the supplier information (Cost, Supplier Part Number, etc.) when creating a Purchase Order.",
+          "required": false,
+          "default": "false"
+        },
+        {
+          "name": "Items.SupplierInfo.isPrimary",
+          "type": "boolean",
+          "description": "At least 1 supplier must be specified as primary (true).",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Items.IsSerialized",
+          "type": "boolean",
+          "description": "If true, creates serialized product.",
+          "required": false,
+          "default": "false"
+        },
+        {
+          "name": "Items.Client",
+          "type": "string",
+          "description": "Only active clients, must exists in UI",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "TenantToken",
+          "type": "string",
+          "description": "*from [getTokens.](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "UserToken",
+          "type": "string",
+          "description": "*from [getTokens.](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Items.IsLotted",
+          "type": "boolean",
+          "description": "",
+          "required": false,
+          "default": "false"
+        },
+        {
+          "name": "Items.LotPriority",
+          "type": "string",
+          "description": "If \"IsLotted\" is set as true, field can't be left empty, possible options Global,FIFO,FEFO,LIFO",
+          "required": false,
+          "default": ""
+        }
+      ],
+      "response_fields": [],
+      "source_file": "createproducts.html"
+    },
+    "createsuppliers": {
+      "title": "/createSuppliers",
+      "method": "post",
+      "url": "/createSuppliers",
+      "category": "purchasing",
+      "description": "",
+      "parameters": [
+        {
+          "name": "Suppliers",
+          "type": "array_object",
+          "description": "",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Suppliers.Name",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Suppliers.EmailTemplateSubject",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Suppliers.EmailTemplateMessage",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Suppliers.Emails",
+          "type": "array_string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "TenantToken",
+          "type": "string",
+          "description": "*from [getTokens.](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "UserToken",
+          "type": "string",
+          "description": "*from [getTokens.](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        }
+      ],
+      "response_fields": [],
+      "source_file": "createsuppliers.html"
+    },
+    "getavailablequantities": {
+      "title": "/getAvailableQuantities",
+      "method": "post",
+      "url": "/getAvailableQuantities",
+      "category": "general",
+      "description": "",
+      "parameters": [
+        {
+          "name": "ModifiedAfterDateTimeUtc",
+          "type": "datetime",
+          "description": "Inventory modified after UTC DateTime",
+          "required": false,
+          "default": "Beginning of time."
+        },
+        {
+          "name": "ModifiedBeforeDateTimeUtc",
+          "type": "datetime",
+          "description": "Inventory modified before UTC DateTime",
+          "required": false,
+          "default": "Now."
+        },
+        {
+          "name": "PageNumber",
+          "type": "int",
+          "description": "The page number to retrieve. Page number starts with 0.",
+          "required": false,
+          "default": "0"
+        },
+        {
+          "name": "PageSize",
+          "type": "int",
+          "description": "Must be between 1000 and 5000.",
+          "required": false,
+          "default": "1000"
+        },
+        {
+          "name": "ExpandAlternateSkus",
+          "type": "boolean",
+          "description": "If true, we will return alternate SKUs as a list instead of separate line items.",
+          "required": false,
+          "default": "false"
+        },
+        {
+          "name": "TenantToken",
+          "type": "string",
+          "description": "Acquired from [getTokens.](https://dev.skuvault.com/docs/gettokens)",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "UserToken",
+          "type": "string",
+          "description": "Acquired from [getTokens.](https://dev.skuvault.com/docs/gettokens)",
+          "required": true,
+          "default": ""
+        }
+      ],
+      "response_fields": [],
+      "source_file": "getavailablequantities.html"
+    },
+    "getbrands": {
+      "title": "/getBrands",
+      "method": "post",
+      "url": "/getBrands",
+      "category": "settings",
+      "description": "",
+      "parameters": [
+        {
+          "name": "PageNumber",
+          "type": "int",
+          "description": "Page number, 1,000 results per page. Page number starts with 0.",
+          "required": false,
+          "default": "0"
+        },
+        {
+          "name": "TenantToken",
+          "type": "string",
+          "description": "*from [getTokens.](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "UserToken",
+          "type": "string",
+          "description": "*from [getTokens.](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        }
+      ],
+      "response_fields": [],
+      "source_file": "getbrands.html"
+    },
+    "getclassifications": {
+      "title": "/getClassifications",
+      "method": "post",
+      "url": "/getClassifications",
+      "category": "settings",
+      "description": "",
+      "parameters": [
+        {
+          "name": "PageNumber",
+          "type": "int",
+          "description": "Page number. 1,000 results per page. Page number starts with 0.",
+          "required": false,
+          "default": "0"
+        },
+        {
+          "name": "TenantToken",
+          "type": "string",
+          "description": "*from [getTokens.](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "UserToken",
+          "type": "string",
+          "description": "*from [getTokens.](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        }
+      ],
+      "response_fields": [],
+      "source_file": "getclassifications.html"
+    },
+    "getexternalwarehousequantities": {
+      "title": "/getExternalWarehouseQuantities",
+      "method": "post",
+      "url": "/getExternalWarehouseQuantities",
+      "category": "inventory",
+      "description": "",
+      "parameters": [
+        {
+          "name": "GetTotalFbaQuantities",
+          "type": "boolean",
+          "description": "Will return the sum of the FBA quantities and warehouses that are associated with an Amazon account in SkuVault. NOTE: If true, then WarehouseId parameter will be ignored.",
+          "required": false,
+          "default": "false"
+        },
+        {
+          "name": "PageNumber",
+          "type": "int",
+          "description": "The page number to be retrieved starting with 0. Defaults to page 0. Page number starts with 0.",
+          "required": false,
+          "default": "0"
+        },
+        {
+          "name": "PageSize",
+          "type": "int",
+          "description": "The number of SKUs to return per page. Can be any number between 1000 and 100000.",
+          "required": false,
+          "default": "10000"
+        },
+        {
+          "name": "WarehouseId",
+          "type": "int",
+          "description": "*from [getExternalWarehouses](doc:getexternalwarehouses)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "TenantToken",
+          "type": "string",
+          "description": "*from [getTokens](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "UserToken",
+          "type": "string",
+          "description": "*from [getTokens](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        }
+      ],
+      "response_fields": [],
+      "source_file": "getexternalwarehousequantities.html"
+    },
+    "getexternalwarehouses": {
+      "title": "/getExternalWarehouses",
+      "method": "post",
+      "url": "/getExternalWarehouses",
+      "category": "inventory",
+      "description": "",
+      "parameters": [
+        {
+          "name": "TenantToken",
+          "type": "string",
+          "description": "*from [getTokens.](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "UserToken",
+          "type": "string",
+          "description": "*from [getTokens.](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        }
+      ],
+      "response_fields": [],
+      "source_file": "getexternalwarehouses.html"
+    },
+    "gethandlingtime": {
+      "title": "/getHandlingTime",
+      "method": "post",
+      "url": "/getHandlingTime",
+      "category": "general",
+      "description": "",
+      "parameters": [
+        {
+          "name": "Tenant Token",
+          "type": "string",
+          "description": "*from [getTokens](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "User Token",
+          "type": "string",
+          "description": "*from [getTokens](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        }
+      ],
+      "response_fields": [],
+      "source_file": "gethandlingtime.html"
+    },
+    "getincomingitems": {
+      "title": "/getIncomingItems",
+      "method": "post",
+      "url": "/getIncomingItems",
+      "category": "products",
+      "description": "",
+      "parameters": [
+        {
+          "name": "PageNumber",
+          "type": "int",
+          "description": "Page number with 0 being the first page. Defaults to 0.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "TenantToken",
+          "type": "string",
+          "description": "Tenant Token to access account",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "UserToken",
+          "type": "string",
+          "description": "User Token to access account",
+          "required": true,
+          "default": ""
+        }
+      ],
+      "response_fields": [],
+      "source_file": "getincomingitems.html"
+    },
+    "getintegrations": {
+      "title": "/getIntegrations",
+      "method": "post",
+      "url": "/getIntegrations",
+      "category": "settings",
+      "description": "",
+      "parameters": [
+        {
+          "name": "TenantToken",
+          "type": "string",
+          "description": "*from [getTokens.](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "UserToken",
+          "type": "string",
+          "description": "*from [getTokens.](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        }
+      ],
+      "response_fields": [],
+      "source_file": "getintegrations.html"
+    },
+    "getinventorybylocation": {
+      "title": "/getInventoryByLocation",
+      "method": "post",
+      "url": "/getInventoryByLocation",
+      "category": "inventory",
+      "description": "",
+      "parameters": [
+        {
+          "name": "IsReturnByCodes",
+          "type": "boolean",
+          "description": "List products by code instead of SKU.",
+          "required": false,
+          "default": "false"
+        },
+        {
+          "name": "PageNumber",
+          "type": "int",
+          "description": "10,000 products per page. Page number starts with 0.",
+          "required": false,
+          "default": "0"
+        },
+        {
+          "name": "PageSize",
+          "type": "int",
+          "description": "Value should be between 1000 and 10000.",
+          "required": false,
+          "default": "10000"
+        },
+        {
+          "name": "ProductCodes",
+          "type": "array_string",
+          "description": "Filter by product codes.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "ProductSKUs",
+          "type": "array_string",
+          "description": "Filter by product SKUs.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "TenantToken",
+          "type": "string",
+          "description": "*from [getTokens](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "UserToken",
+          "type": "string",
+          "description": "*from [getTokens](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        }
+      ],
+      "response_fields": [],
+      "source_file": "getinventorybylocation.html"
+    },
+    "getitemquantities": {
+      "title": "/getItemQuantities",
+      "method": "post",
+      "url": "/getItemQuantities",
+      "category": "products",
+      "description": "",
+      "parameters": [
+        {
+          "name": "ModifiedAfterDateTimeUtc",
+          "type": "datetime",
+          "description": "Product inventory modified after date time in UTC.",
+          "required": false,
+          "default": "Beginning of time."
+        },
+        {
+          "name": "ModifiedBeforeDateTimeUtc",
+          "type": "datetime",
+          "description": "Product inventory modified before date time in UTC.",
+          "required": false,
+          "default": "Now."
+        },
+        {
+          "name": "ProductCodes",
+          "type": "array_string",
+          "description": "Filter results by a list of Codes, limited to 10000",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "PageNumber",
+          "type": "int",
+          "description": "Defaults to 0.",
+          "required": false,
+          "default": "0"
+        },
+        {
+          "name": "PageSize",
+          "type": "int",
+          "description": "Value should be between 1000 and 10000.",
+          "required": false,
+          "default": "10000"
+        },
+        {
+          "name": "TenantToken",
+          "type": "string",
+          "description": "*from [getTokens](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "UserToken",
+          "type": "string",
+          "description": "*from [getTokens](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        }
+      ],
+      "response_fields": [],
+      "source_file": "getitemquantities.html"
+    },
+    "getkitquantities": {
+      "title": "/getKitQuantities",
+      "method": "post",
+      "url": "/getKitQuantities",
+      "category": "products",
+      "description": "",
+      "parameters": [
+        {
+          "name": "ModifiedAfterDateTimeUtc",
+          "type": "datetime",
+          "description": "Kit inventory modified after date time in UTC.",
+          "required": false,
+          "default": "Beginning of time."
+        },
+        {
+          "name": "ModifiedBeforeDateTimeUtc\" ModifiedBeforeDateTimeUtc",
+          "type": "datetime",
+          "description": "Kit inventory modified before date time in UTC.",
+          "required": false,
+          "default": "Now."
+        },
+        {
+          "name": "PageNumber",
+          "type": "int",
+          "description": "10,000 kits per page. Page number starts with 0.",
+          "required": false,
+          "default": "0"
+        },
+        {
+          "name": "TenantToken",
+          "type": "string",
+          "description": "*from [getTokens](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "UserToken",
+          "type": "string",
+          "description": "*from [getTokens](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        }
+      ],
+      "response_fields": [],
+      "source_file": "getkitquantities.html"
+    },
+    "getkits": {
+      "title": "/getKits",
+      "method": "post",
+      "url": "/getKits",
+      "category": "products",
+      "description": "",
+      "parameters": [
+        {
+          "name": "AvailableQuantityModifiedAfterDateTimeUtc",
+          "type": "datetime",
+          "description": "Modified  kit quantities after date time in UTC.",
+          "required": false,
+          "default": "minDate"
+        },
+        {
+          "name": "AvailableQuantityModifiedBeforeDateTimeUtc",
+          "type": "datetime",
+          "description": "Modified kit quantities before date time in UTC.",
+          "required": false,
+          "default": "maxDate"
+        },
+        {
+          "name": "GetAvailableQuantity",
+          "type": "boolean",
+          "description": "If false, AvailableQuantity will always return 0.",
+          "required": false,
+          "default": "false"
+        },
+        {
+          "name": "IncludeKitCost",
+          "type": "boolean",
+          "description": "If true, then return cost for the kit with response",
+          "required": false,
+          "default": "false"
+        },
+        {
+          "name": "KitSKUs",
+          "type": "array_string",
+          "description": "Filter results by a list of SKUs.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "ModifiedAfterDateTimeUtc",
+          "type": "datetime",
+          "description": "",
+          "required": true,
+          "default": "minDate"
+        },
+        {
+          "name": "ModifiedBeforeDateTimeUtc",
+          "type": "datetime",
+          "description": "",
+          "required": true,
+          "default": "maxDate"
+        },
+        {
+          "name": "PageNumber",
+          "type": "int",
+          "description": "Defaults to 0.",
+          "required": false,
+          "default": "0"
+        },
+        {
+          "name": "TenantToken",
+          "type": "string",
+          "description": "*from [getTokens.](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "UserToken",
+          "type": "string",
+          "description": "*from [getTokens.](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        }
+      ],
+      "response_fields": [],
+      "source_file": "getkits.html"
+    },
+    "getlocations": {
+      "title": "/getLocations",
+      "method": "post",
+      "url": "/getLocations",
+      "category": "inventory",
+      "description": "",
+      "parameters": [
+        {
+          "name": "TenantToken",
+          "type": "string",
+          "description": "*from [getTokens](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "UserToken",
+          "type": "string",
+          "description": "*from [getTokens](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        }
+      ],
+      "response_fields": [],
+      "source_file": "getlocations.html"
+    },
+    "getlotinventorybylocation": {
+      "title": "/getLotInventoryByLocation",
+      "method": "post",
+      "url": "/inventory/getLotInventoryByLocation",
+      "category": "inventory",
+      "description": "",
+      "parameters": [
+        {
+          "name": "IsReturnByCodes",
+          "type": "boolean",
+          "description": "Can't be used along \"ProductSKUs\", if this set to true, this will bring ALL products whenever it is lotted or no",
+          "required": false,
+          "default": "False"
+        },
+        {
+          "name": "ProductSKUs",
+          "type": "array_string",
+          "description": "Can't be used along \"IsReturnByCodes\", this will bring specific item's quantities",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "TenantToken",
+          "type": "string",
+          "description": "",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "UserToken",
+          "type": "string",
+          "description": "",
+          "required": true,
+          "default": ""
+        }
+      ],
+      "response_fields": [],
+      "source_file": "getlotinventorybylocation.html"
+    },
+    "getlots": {
+      "title": "/getLots",
+      "method": "post",
+      "url": "/products/getLots",
+      "category": "general",
+      "description": "",
+      "parameters": [
+        {
+          "name": "ProductSku",
+          "type": "string",
+          "description": "",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Page number",
+          "type": "int",
+          "description": "",
+          "required": false,
+          "default": "0"
+        },
+        {
+          "name": "PageSize",
+          "type": "int",
+          "description": "Accept values between 100 and 10000",
+          "required": false,
+          "default": "100"
+        },
+        {
+          "name": "TenantToken",
+          "type": "string",
+          "description": "",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "UserToken",
+          "type": "string",
+          "description": "",
+          "required": true,
+          "default": ""
+        }
+      ],
+      "response_fields": [],
+      "source_file": "getlots.html"
+    },
+    "getonlinesalestatus": {
+      "title": "/getOnlineSaleStatus",
+      "method": "post",
+      "url": "/getOnlineSaleStatus",
+      "category": "sales",
+      "description": "",
+      "parameters": [
+        {
+          "name": "OrderIds",
+          "type": "array_string",
+          "description": "List of IDs to get status on. Only 10000 orders can be accessed at at a time. All extra IDs will be ignored.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "TenantToken",
+          "type": "string",
+          "description": "*from [getTokens](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "UserToken",
+          "type": "string",
+          "description": "*from [getTokens](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        }
+      ],
+      "response_fields": [],
+      "source_file": "getonlinesalestatus.html"
+    },
+    "getpos": {
+      "title": "/getPOs",
+      "method": "post",
+      "url": "/getPOs",
+      "category": "purchasing",
+      "description": "",
+      "parameters": [
+        {
+          "name": "ModifiedAfterDateTimeUtc",
+          "type": "datetime",
+          "description": "",
+          "required": false,
+          "default": "minDate"
+        },
+        {
+          "name": "ModifiedBeforeDateTimeUtc",
+          "type": "datetime",
+          "description": "",
+          "required": false,
+          "default": "maxDate"
+        },
+        {
+          "name": "Status",
+          "type": "string",
+          "description": "We will return all POs that are not completed by Default. To get completed PO's, you must intentionally specify in the call. Possible values are: NoneReceived, PartiallyReceived, Completed, Cancelled",
+          "required": false,
+          "default": "Everything except Completed"
+        },
+        {
+          "name": "PageNumber",
+          "type": "int",
+          "description": "10,000 POs are returned per page. Defaults to 0.",
+          "required": false,
+          "default": "0"
+        },
+        {
+          "name": "IncludeProducts",
+          "type": "boolean",
+          "description": "Returns incoming product details in separate array.",
+          "required": false,
+          "default": "false"
+        },
+        {
+          "name": "PONumbers",
+          "type": "array_string",
+          "description": "A list of PO Numbers you can request data for. If using this parameter, the Date parameters and Status parameter is ignored.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "TenantToken",
+          "type": "string",
+          "description": "*from [getTokens](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "UserToken",
+          "type": "string",
+          "description": "*from [getTokens](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        }
+      ],
+      "response_fields": [],
+      "source_file": "getpos.html"
+    },
+    "getproduct": {
+      "title": "/getProduct",
+      "method": "post",
+      "url": "/getProduct",
+      "category": "products",
+      "description": "",
+      "parameters": [
+        {
+          "name": "ProductCode",
+          "type": "string",
+          "description": "Optional product Code. Either Code or SKU should be provided.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "ProductSKU",
+          "type": "string",
+          "description": "Optional product SKU. Either SKU or Code should be provided.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "TenantToken",
+          "type": "string",
+          "description": "*from [getTokens.](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "UserToken",
+          "type": "string",
+          "description": "*from [getTokens.](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        }
+      ],
+      "response_fields": [],
+      "source_file": "getproduct.html"
+    },
+    "getproducts": {
+      "title": "/getProducts",
+      "method": "post",
+      "url": "/getProducts",
+      "category": "products",
+      "description": "",
+      "parameters": [
+        {
+          "name": "ModifiedAfterDateTimeUtc",
+          "type": "datetime",
+          "description": "Modified product details after date time in UTC.",
+          "required": false,
+          "default": "minDate"
+        },
+        {
+          "name": "ModifiedBeforeDateTimeUtc",
+          "type": "datetime",
+          "description": "Modified product details before date time in UTC.",
+          "required": false,
+          "default": "maxDate"
+        },
+        {
+          "name": "PageNumber",
+          "type": "int",
+          "description": "Page number starts with 0.",
+          "required": false,
+          "default": "0"
+        },
+        {
+          "name": "PageSize",
+          "type": "int",
+          "description": "Should be between 1000 and 10000.",
+          "required": false,
+          "default": "10000"
+        },
+        {
+          "name": "ProductCodes",
+          "type": "array_string",
+          "description": "Filter results by a list of Product Codes",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "ProductSKUs",
+          "type": "array_string",
+          "description": "Filter results by a list of SKUs.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "TenantToken",
+          "type": "string",
+          "description": "*from [getTokens.](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "UserToken",
+          "type": "string",
+          "description": "*from [getTokens.](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        }
+      ],
+      "response_fields": [],
+      "source_file": "getproducts.html"
+    },
+    "getreceiveshistory": {
+      "title": "/getReceivesHistory",
+      "method": "post",
+      "url": "/getReceivesHistory",
+      "category": "general",
+      "description": "",
+      "parameters": [
+        {
+          "name": "WarehouseFilter",
+          "type": "array_string",
+          "description": "Filter to get receives for one or a list of Warehouse Codes",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "PageNumber",
+          "type": "int",
+          "description": "Specify which page to return. Page number starts with 0.",
+          "required": false,
+          "default": "0"
+        },
+        {
+          "name": "PageSize",
+          "type": "int",
+          "description": "Specify page size. Value should be between 1000 and 10000. Default is 10000. We will return the \"Receives\" collection first, then the \"Corrections\" collections last.",
+          "required": false,
+          "default": "10000"
+        },
+        {
+          "name": "PoNumberFilter",
+          "type": "array_string",
+          "description": "Filter to get receives for one or a list of PO's",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "ReceivedAfterDateTimeUTC",
+          "type": "datetime",
+          "description": "Filter for receives after this date and time.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "ReceivedBeforeDateTimeUTC",
+          "type": "datetime",
+          "description": "Filter for receives before this date and time.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "TenantToken",
+          "type": "string",
+          "description": "*from [getTokens](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "UserToken",
+          "type": "string",
+          "description": "*from [getTokens](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        }
+      ],
+      "response_fields": [],
+      "source_file": "getreceiveshistory.html"
+    },
+    "getsaleitemcost": {
+      "title": "/getSaleItemCost",
+      "method": "post",
+      "url": "/getSaleItemCost",
+      "category": "products",
+      "description": "",
+      "parameters": [
+        {
+          "name": "SaleIds",
+          "type": "string",
+          "description": "List of sale IDs. Can be one or multiple.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "TenantToken",
+          "type": "string",
+          "description": "*from [getTokens.](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "UserToken",
+          "type": "string",
+          "description": "*from [getTokens.](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        }
+      ],
+      "response_fields": [],
+      "source_file": "getsaleitemcost.html"
+    },
+    "getsales": {
+      "title": "/getSales",
+      "method": "post",
+      "url": "/getSales",
+      "category": "sales",
+      "description": "",
+      "parameters": [
+        {
+          "name": "Status",
+          "type": "string",
+          "description": "One of: ReadyToShip, Pending",
+          "required": false,
+          "default": "ReadyToShip"
+        },
+        {
+          "name": "OrderIds",
+          "type": "array_string",
+          "description": "This is a list of order IDs that you can query for. Max 10000 per call. If you query for orders, we will only return those orders and ignore the \"Status\" filter. Essentially, it overwrites this filter. Also, take note that you can only filter for orders that originated from the API if you send in an Order ID. If you send in the full SkuVault ID, it will return the sale that matches that regardless of its source.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "TenantToken",
+          "type": "string",
+          "description": "*from [getTokens](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "UserToken",
+          "type": "string",
+          "description": "*from [getTokens](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        }
+      ],
+      "response_fields": [],
+      "source_file": "getsales.html"
+    },
+    "getsalesbydate": {
+      "title": "/getSalesByDate",
+      "method": "post",
+      "url": "/getSalesByDate",
+      "category": "sales",
+      "description": "",
+      "parameters": [
+        {
+          "name": "DateField",
+          "type": "string",
+          "description": "2 possible values: **Modified** or **Sale**. A value of **Modified** will have the call return sales that have a last modified date within the date range specified. A value of **Sale** will search for sales that have an order date within the specified date range. (Using **Sale** is the how the call works when the DateField parameter isn't included at all)",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "FromDate",
+          "type": "datetime",
+          "description": "Start of inclusive time interval.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "ToDate",
+          "type": "datetime",
+          "description": "End of inclusive time interval.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "PageNumber",
+          "type": "int",
+          "description": "Page number starts with 0.",
+          "required": false,
+          "default": "0"
+        },
+        {
+          "name": "PageSize",
+          "type": "int",
+          "description": "Number of sales to return per page. Can be a value between 1000 and 10000. It is 10000 by default.",
+          "required": false,
+          "default": "10000"
+        },
+        {
+          "name": "TenantToken",
+          "type": "string",
+          "description": "*from [getTokens](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "UserToken",
+          "type": "string",
+          "description": "*from [getTokens](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        }
+      ],
+      "response_fields": [],
+      "source_file": "getsalesbydate.html"
+    },
+    "getserialnumbers": {
+      "title": "/getSerialNumbers",
+      "method": "post",
+      "url": "/getSerialNumbers",
+      "category": "general",
+      "description": "",
+      "parameters": [
+        {
+          "name": "ProductSKU",
+          "type": "string",
+          "description": "SKU of the serialized product",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "TenantToken",
+          "type": "string",
+          "description": "*from [getTokens.](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "UserToken",
+          "type": "string",
+          "description": "*from [getTokens.](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        }
+      ],
+      "response_fields": [],
+      "source_file": "getserialnumbers.html"
+    },
+    "getshipments": {
+      "title": "/getShipments",
+      "method": "post",
+      "url": "/getShipments",
+      "category": "sales",
+      "description": "",
+      "parameters": [
+        {
+          "name": "SaleIds",
+          "type": "string",
+          "description": "Sale ID - Must exist in SkuVault",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "TenantToken",
+          "type": "string",
+          "description": "Tenant Token associated with account.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "UserToken",
+          "type": "string",
+          "description": "User Token associated with account.",
+          "required": true,
+          "default": ""
+        }
+      ],
+      "response_fields": [],
+      "source_file": "getshipments.html"
+    },
+    "getsolditems": {
+      "title": "/getSoldItems",
+      "method": "post",
+      "url": "/getSoldItems",
+      "category": "products",
+      "description": "",
+      "parameters": [
+        {
+          "name": "StartDateUtc",
+          "type": "datetime",
+          "description": "Start date in UTC",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "EndDateUtc",
+          "type": "datetime",
+          "description": "End date in UTC",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "IncludeTransferSales",
+          "type": "boolean",
+          "description": "Specify if you want to include Transfers sales to the search, the default is true",
+          "required": false,
+          "default": "true"
+        },
+        {
+          "name": "BreakDownKits",
+          "type": "boolean",
+          "description": "Break down kits to show component products.",
+          "required": false,
+          "default": "true"
+        },
+        {
+          "name": "PageNumber",
+          "type": "int",
+          "description": "Specify page number to be returned.  Page number starts with 0.",
+          "required": false,
+          "default": "0"
+        },
+        {
+          "name": "TenantToken",
+          "type": "string",
+          "description": "*from [getTokens](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "UserToken",
+          "type": "string",
+          "description": "*from [getTokens](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        }
+      ],
+      "response_fields": [],
+      "source_file": "getsolditems.html"
+    },
+    "getsuppliers": {
+      "title": "/getSuppliers",
+      "method": "post",
+      "url": "/getSuppliers",
+      "category": "purchasing",
+      "description": "",
+      "parameters": [
+        {
+          "name": "PageNumber",
+          "type": "int",
+          "description": "10,000 results per page. Defaults to 0.",
+          "required": false,
+          "default": "0"
+        },
+        {
+          "name": "TenantToken",
+          "type": "string",
+          "description": "*from [getTokens.](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "UserToken",
+          "type": "string",
+          "description": "*from [getTokens.](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        }
+      ],
+      "response_fields": [],
+      "source_file": "getsuppliers.html"
+    },
+    "gettokens": {
+      "title": "/getTokens",
+      "method": "post",
+      "url": "/gettokens",
+      "category": "general",
+      "description": "",
+      "parameters": [
+        {
+          "name": "Email",
+          "type": "string",
+          "description": "Your SkuVault login email.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Password",
+          "type": "string",
+          "description": "Your SkuVault login password.",
+          "required": true,
+          "default": ""
+        }
+      ],
+      "response_fields": [],
+      "source_file": "gettokens.html"
+    },
+    "gettransactions": {
+      "title": "/getTransactions",
+      "method": "post",
+      "url": "/getTransactions",
+      "category": "general",
+      "description": "",
+      "parameters": [
+        {
+          "name": "FromDate",
+          "type": "datetime",
+          "description": "",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "ToDate",
+          "type": "datetime",
+          "description": "Max range: 1 week",
+          "required": true,
+          "default": "now"
+        },
+        {
+          "name": "PageNumber",
+          "type": "int",
+          "description": "Page number starts with 0.",
+          "required": false,
+          "default": "0"
+        },
+        {
+          "name": "PageSize",
+          "type": "int",
+          "description": "Valid range: 1000-10000",
+          "required": false,
+          "default": "10000"
+        },
+        {
+          "name": "MinimumPageSize",
+          "type": "int",
+          "description": "This allows you to set a new minimum page size. Valid Range: 250-999",
+          "required": false,
+          "default": "1000"
+        },
+        {
+          "name": "UserEmail",
+          "type": "string",
+          "description": "Include a User's Email to see all transactions made as that user. The email field is case sensitive.",
+          "required": false,
+          "default": "null"
+        },
+        {
+          "name": "WarehouseId",
+          "type": "string",
+          "description": "*from [getWarehouses](doc:getwarehouses)*",
+          "required": false,
+          "default": "null"
+        },
+        {
+          "name": "TransactionType",
+          "type": "string",
+          "description": "All, Add, Remove, Pick, or Create",
+          "required": false,
+          "default": "All"
+        },
+        {
+          "name": "TransactionReasons",
+          "type": "array_string",
+          "description": "This is a list of transactions reason to include in the response.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "ExcludeTransactionReasons",
+          "type": "array_string",
+          "description": "This is a list of transactions to exclude from the call",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "SaleId",
+          "type": "string",
+          "description": "Include a sale ID to see all transactions made against a specific sale.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "TenantToken",
+          "type": "string",
+          "description": "*from [getTokens](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "UserToken",
+          "type": "string",
+          "description": "*from [getTokens](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        }
+      ],
+      "response_fields": [],
+      "source_file": "gettransactions.html"
+    },
+    "getwarehouseitemquantities": {
+      "title": "/getWarehouseItemQuantities",
+      "method": "post",
+      "url": "/getWarehouseItemQuantities",
+      "category": "products",
+      "description": "",
+      "parameters": [
+        {
+          "name": "ModifiedBeforeDateTimeUtc",
+          "type": "datetime",
+          "description": "Modified before date time in UTC (optional, by default used max date).",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "ModifiedAfterDateTimeUtc",
+          "type": "datetime",
+          "description": "Modified after date time in UTC (optional, by default used min date).",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "PageNumber",
+          "type": "int",
+          "description": "Page number with 0 being the first page. Defaults to 0.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "PageSize",
+          "type": "string",
+          "description": "Number of objects to return per page. Can be any value between 1000 and 10000.",
+          "required": false,
+          "default": "10000"
+        },
+        {
+          "name": "WarehouseId",
+          "type": "int",
+          "description": "*from [getWarehouses](doc:getwarehouses)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "TenantToken",
+          "type": "string",
+          "description": "*from [getTokens](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "UserToken",
+          "type": "string",
+          "description": "*from [getTokens](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        }
+      ],
+      "response_fields": [],
+      "source_file": "getwarehouseitemquantities.html"
+    },
+    "getwarehouseitemquantity": {
+      "title": "/getWarehouseItemQuantity",
+      "method": "post",
+      "url": "/getWarehouseItemQuantity",
+      "category": "products",
+      "description": "",
+      "parameters": [
+        {
+          "name": "Sku",
+          "type": "string",
+          "description": "The Sku to filter by.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "WarehouseId",
+          "type": "int",
+          "description": "*from [getWarehouses](doc:getwarehouses)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "TenantToken",
+          "type": "string",
+          "description": "*from [getTokens](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "UserToken",
+          "type": "string",
+          "description": "*from [getTokens](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        }
+      ],
+      "response_fields": [],
+      "source_file": "getwarehouseitemquantity.html"
+    },
+    "getwarehouses": {
+      "title": "/getWarehouses",
+      "method": "post",
+      "url": "/getWarehouses",
+      "category": "inventory",
+      "description": "",
+      "parameters": [
+        {
+          "name": "PageNumber",
+          "type": "int",
+          "description": "Page to return. Page number starts with 0.",
+          "required": false,
+          "default": "0"
+        },
+        {
+          "name": "TenantToken",
+          "type": "string",
+          "description": "*from [getTokens.](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "UserToken",
+          "type": "string",
+          "description": "*from [getTokens.](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        }
+      ],
+      "response_fields": [],
+      "source_file": "getwarehouses.html"
+    },
+    "pickitem": {
+      "title": "/pickItem",
+      "method": "post",
+      "url": "/pickItem",
+      "category": "products",
+      "description": "",
+      "parameters": [
+        {
+          "name": "WarehouseId",
+          "type": "int",
+          "description": "*from [getWarehouses](doc:getwarehouses)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "LocationCode",
+          "type": "string",
+          "description": "Location Code. Required if not using express pick.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Code",
+          "type": "string",
+          "description": "Product to pick. Required if not defining SKU.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Sku",
+          "type": "string",
+          "description": "Product Sku to pick. Required if not defining Code.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Quantity",
+          "type": "int",
+          "description": "The quantity to pick",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "IsExpressPick",
+          "type": "boolean",
+          "description": "Uses express pick to determine location. Required if not defining location.",
+          "required": false,
+          "default": "false"
+        },
+        {
+          "name": "Note",
+          "type": "string",
+          "description": "The note to add to the transaction.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "ScannedCode",
+          "type": "string",
+          "description": "Scanned code",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "SerialNumbers",
+          "type": "array_string",
+          "description": "Serial Numbers. Required for serialized products. Amount of Serial Numbers should correspond to the Quantity.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "AllowPickItemNotInSale",
+          "type": "boolean",
+          "description": "defaults to false, param only required if true",
+          "required": false,
+          "default": "false"
+        },
+        {
+          "name": "AllowPickQuantityGreaterThanRemainingSaleQuantity",
+          "type": "boolean",
+          "description": "defaults to false, param only required if true",
+          "required": false,
+          "default": "false"
+        },
+        {
+          "name": "PickMode",
+          "type": "string",
+          "description": "Can be blank or set to \"Simple\", \"CheckItemAgainstOrder\" or \"QcOnPick\".",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "TenantToken",
+          "type": "string",
+          "description": "*from [getTokens.](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "UserToken",
+          "type": "string",
+          "description": "*from [getTokens.](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "SaleId",
+          "type": "string",
+          "description": "To be included in the call unless the user has set the PickMode to Simple (in which case no sale ID is required)",
+          "required": false,
+          "default": ""
+        }
+      ],
+      "response_fields": [],
+      "source_file": "pickitem.html"
+    },
+    "pickitembulk": {
+      "title": "/pickItemBulk",
+      "method": "post",
+      "url": "/pickItemBulk",
+      "category": "products",
+      "description": "",
+      "parameters": [
+        {
+          "name": "Items",
+          "type": "array_mixed",
+          "description": "The list of items which will be picked within the transaction.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Items.SaleId",
+          "type": "string",
+          "description": "To be included in the call unless the user has set the PickMode to Simple (in which case no sale ID is required)",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Items.Sku",
+          "type": "string",
+          "description": "Product Sku to pick. Required if not defining Code.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Items.Code",
+          "type": "string",
+          "description": "Product to pick. Required if not defining SKU.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Items.WarehouseId",
+          "type": "int",
+          "description": "*from [getWarehouses](doc:getwarehouses)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Items.LocationCode",
+          "type": "string",
+          "description": "Location Code. Required if not using express pick.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Items.Quantity",
+          "type": "int",
+          "description": "The quantity to pick",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Items.IsExpressPick",
+          "type": "boolean",
+          "description": "Uses Express Pick to determine location. Required if not defining Location Code. Must be entered as either 'false' or 'true'",
+          "required": false,
+          "default": "false"
+        },
+        {
+          "name": "Items.Note",
+          "type": "string",
+          "description": "The note to add to the transaction.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Items.SerialNumbers",
+          "type": "array_string",
+          "description": "Serial Numbers. Required for serialized products. Amount of Serial Numbers should correspond to the Quantity.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Items.PickMode",
+          "type": "string",
+          "description": "Can be blank or set to \"Simple\", \"CheckItemAgainstOrder\" or \"QcOnPick\".",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Items.AllowPickItemNotInSale",
+          "type": "boolean",
+          "description": "defaults to false, param only required if true",
+          "required": false,
+          "default": "false"
+        },
+        {
+          "name": "Items.AllowPickQuantityGreaterThanRemainingSaleQuantity",
+          "type": "boolean",
+          "description": "defaults to false, param only required if true",
+          "required": false,
+          "default": "false"
+        },
+        {
+          "name": "TenantToken",
+          "type": "string",
+          "description": "*from [getTokens.](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "UserToken",
+          "type": "string",
+          "description": "*from [getTokens.](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        }
+      ],
+      "response_fields": [],
+      "source_file": "pickitembulk.html"
+    },
+    "receivepoitems": {
+      "title": "/receivePOItems",
+      "method": "post",
+      "url": "/receivePOItems",
+      "category": "products",
+      "description": "",
+      "parameters": [
+        {
+          "name": "PoNumber",
+          "type": "string",
+          "description": "The PO number to receive against.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "SupplierName",
+          "type": "string",
+          "description": "Supplier associated with the PO.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "ReceiptDate",
+          "type": "datetime",
+          "description": "Date and time items were received.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "LineItems",
+          "type": "array_object",
+          "description": "",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "LineItems.SKU",
+          "type": "string",
+          "description": "The SKU being received.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "LineItems.Quantity",
+          "type": "int",
+          "description": "The quantity being received.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "LineItems.LotNumber",
+          "type": "string",
+          "description": "Needed if recieving lotted products",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "LineItems.QuantityTo3PL",
+          "type": "int",
+          "description": "The quantity received being sent to your 3PL warehouse.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "LineItems.SerialNumbers",
+          "type": "array_string",
+          "description": "Serial Numbers. Required for serialized products.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "LineItems.Location",
+          "type": "string",
+          "description": "Location the item quantity is being received to.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "WarehouseId",
+          "type": "int",
+          "description": "*from [getWarehouses](doc:getwarehouses)* | Required if receiving to a location.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "TenantToken",
+          "type": "string",
+          "description": "*from [getTokens](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "UserToken",
+          "type": "string",
+          "description": "*from [getTokens](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        }
+      ],
+      "response_fields": [],
+      "source_file": "receivepoitems.html"
+    },
+    "releaseheldquantities": {
+      "title": "/releaseHeldQuantities",
+      "method": "post",
+      "url": "/releaseHeldQuantities",
+      "category": "general",
+      "description": "",
+      "parameters": [
+        {
+          "name": "SkusToRelease",
+          "type": "object",
+          "description": "Dictionary of SKUs and the quantity to release for each SKU",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "TenantToken",
+          "type": "string",
+          "description": "*from [getTokens](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "UserToken",
+          "type": "string",
+          "description": "*from [getTokens](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        }
+      ],
+      "response_fields": [],
+      "source_file": "releaseheldquantities.html"
+    },
+    "removeitem": {
+      "title": "/removeItem",
+      "method": "post",
+      "url": "/removeItem",
+      "category": "inventory",
+      "description": "",
+      "parameters": [
+        {
+          "name": "Code",
+          "type": "string",
+          "description": "Product Code. Required if SKU is omitted.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Sku",
+          "type": "string",
+          "description": "Product SKU. Required if Code is omitted.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "WarehouseId",
+          "type": "int",
+          "description": "*from [getWarehouses](doc:getwarehouses)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "LocationCode",
+          "type": "string",
+          "description": "The warehouse location to remove quantity from",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Quantity",
+          "type": "int",
+          "description": "The quantity to remove",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Reason",
+          "type": "string",
+          "description": "Transaction reason must exist in SkuVault",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "SerialNumbers",
+          "type": "array_string",
+          "description": "Serial Numbers. Required for serialized products. Amount of Serial Numbers should correspond to the Quantity.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "TenantToken",
+          "type": "string",
+          "description": "*from [getTokens](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "UserToken",
+          "type": "string",
+          "description": "*from [getTokens](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        }
+      ],
+      "response_fields": [],
+      "source_file": "removeitem.html"
+    },
+    "removeitembulk": {
+      "title": "/removeItemBulk",
+      "method": "post",
+      "url": "/removeItemBulk",
+      "category": "products",
+      "description": "",
+      "parameters": [
+        {
+          "name": "Items",
+          "type": "array_object",
+          "description": "Max 100",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Items.Code",
+          "type": "string",
+          "description": "Product Code. Required if SKU is omitted.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Items.Sku",
+          "type": "string",
+          "description": "Product SKU. Required if Code is omitted.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Items.WarehouseId",
+          "type": "int",
+          "description": "*from [getWarehouses](doc:getwarehouses)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Items.LocationCode",
+          "type": "string",
+          "description": "The warehouse location to remove quantity from",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Items.Quantity",
+          "type": "int",
+          "description": "The quantity to remove",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Items.Reason",
+          "type": "string",
+          "description": "Transaction reason must exist in SkuVault",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Items.SerialNumbers",
+          "type": "array_string",
+          "description": "Serial Numbers. Required for serialized products. Amount of Serial Numbers should correspond to the Quantity.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "TenantToken",
+          "type": "string",
+          "description": "*from [getTokens](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "UserToken",
+          "type": "string",
+          "description": "*from [getTokens](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        }
+      ],
+      "response_fields": [],
+      "source_file": "removeitembulk.html"
+    },
+    "setitemquantities": {
+      "title": "/setItemQuantities",
+      "method": "post",
+      "url": "/setItemQuantities",
+      "category": "products",
+      "description": "",
+      "parameters": [
+        {
+          "name": "Items",
+          "type": "array_object",
+          "description": "",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Items.Code",
+          "type": "string",
+          "description": "Required if SKU is omitted.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Items.Sku",
+          "type": "string",
+          "description": "Required if Code is omitted.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Items.WarehouseId",
+          "type": "int",
+          "description": "*from [getWarehouses](doc:getwarehouses)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Items.LocationCode",
+          "type": "string",
+          "description": "The warehouse location to set quantity.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Items.Quantity",
+          "type": "int",
+          "description": "The quantity to set.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "TenantToken",
+          "type": "string",
+          "description": "*from [getTokens](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "UserToken",
+          "type": "string",
+          "description": "*from [getTokens](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        }
+      ],
+      "response_fields": [],
+      "source_file": "setitemquantities.html"
+    },
+    "setitemquantity": {
+      "title": "/setItemQuantity",
+      "method": "post",
+      "url": "/setItemQuantity",
+      "category": "products",
+      "description": "",
+      "parameters": [
+        {
+          "name": "Code",
+          "type": "string",
+          "description": "The SKU you are setting quantity for. Used when SKU is blank.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Sku",
+          "type": "string",
+          "description": "The SKU you are setting quantity for. Used when Code is blank.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "WarehouseId",
+          "type": "int",
+          "description": "*from [getWarehouses](doc:getwarehouses)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "LocationCode",
+          "type": "string",
+          "description": "The warehouse location to set quantity in.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Quantity",
+          "type": "int",
+          "description": "The quantity to set for a SKU.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "TenantToken",
+          "type": "string",
+          "description": "*from [getTokens](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "UserToken",
+          "type": "string",
+          "description": "*from [getTokens](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        }
+      ],
+      "response_fields": [],
+      "source_file": "setitemquantity.html"
+    },
+    "synconlinesale": {
+      "title": "/syncOnlineSale",
+      "method": "post",
+      "url": "/syncOnlineSale",
+      "category": "sales",
+      "description": "",
+      "parameters": [
+        {
+          "name": "OrderId",
+          "type": "string",
+          "description": "The order ID. After order is synced it's status can be retrieved by the same ID. NOTE: You can create AND update sales that do not originate from the API if you provide the full SkuVault Sale ID in this parameter. In other words, if a sale originated from Magento, you can update it in the API if you provide the full SkuVault Sale ID.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "MarketplaceId",
+          "type": "string",
+          "description": "Add a distinct marketplace ID to your sale.",
+          "required": false,
+          "default": "OrderId Value"
+        },
+        {
+          "name": "OrderDateUtc",
+          "type": "datetime",
+          "description": "The UTC date and time order was created.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "OrderTotal",
+          "type": "double",
+          "description": "Total order price. Can be different than the sum sale price of sold SKUs.",
+          "required": false,
+          "default": "0"
+        },
+        {
+          "name": "CheckoutStatus",
+          "type": "string",
+          "description": "[View guide](doc:sale-status-guide). One of: NotVisited, Visited, OnHold, Completed, CompletedOffline, Cancelled",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "PaymentStatus",
+          "type": "string",
+          "description": "[View guide](doc:sale-status-guide). One of: NotSubmitted, Submitted, Deposited, Cleared, Failed",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "SaleState",
+          "type": "string",
+          "description": "[View guide](doc:sale-status-guide). One of: Active, Cancelled, Archived",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "AutoRemoveInfo",
+          "type": "object",
+          "description": "Picks against a sale when sale is marked as \"Completed\".",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "AutoRemoveInfo.AutoRemove",
+          "type": "boolean",
+          "description": "Accepts either \"true\" or \"false\". *Note:* AutoRemove as an account setting is global, so even with a value of \"false\" the system will still attempt to pick sale items.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "AutoRemoveInfo.WarehouseCode.Code",
+          "type": "string",
+          "description": "",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "AutoRemoveInfo.WarehouseName.Name",
+          "type": "string",
+          "description": "",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Notes",
+          "type": "string",
+          "description": "Sale notes associated with this order.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "ItemSkus",
+          "type": "array_object",
+          "description": "List of merchant-fulfilled items in the order. Required only if FulfilledItems is missing.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "ItemSkus.Sku",
+          "type": "string",
+          "description": "The SKU sold.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "ItemSkus.Quantity",
+          "type": "int",
+          "description": "The sold quantity, must be higher than or equal to 1.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "ItemSkus.UnitPrice",
+          "type": "double",
+          "description": "The sold unit price.",
+          "required": false,
+          "default": "0"
+        },
+        {
+          "name": "FulfilledItems",
+          "type": "array_object",
+          "description": "List of 3PL/FBA-fulfilled items in the order.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "FulfilledItems.SKU",
+          "type": "string",
+          "description": "The SKU of the sold 3PL line item.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "FulfilledItems.Quantity",
+          "type": "int",
+          "description": "The sold quantity of the 3PL line item.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "FulfilledItems.UnitPrice",
+          "type": "double",
+          "description": "The sold unit price of the 3PL line item.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "ShippingInfo",
+          "type": "object",
+          "description": "Shipping information about sale, such as shipped status, carrier, class, and destination.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "ShippingInfo.ShippingStatus",
+          "type": "string",
+          "description": "[View guide](doc:sale-status-guide). One of: Unshipped, PendingShipment, PartiallyShipped, Shipped",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "ShippingInfo.ShippingCarrier",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "ShippingInfo.ShippingClass",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "ShippingInfo.FirstName",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "ShippingInfo.LastName",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "ShippingInfo.CompanyName",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "ShippingInfo.PhoneNumber",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "ShippingInfo.Email",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "ShippingInfo.Line1",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "ShippingInfo.Line2",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "ShippingInfo.City",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "ShippingInfo.Region",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "ShippingInfo.Postal",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "ShippingInfo.Country",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "ChannelType",
+          "type": "string",
+          "description": "Channel Type",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "ChannelAccountId",
+          "type": "long",
+          "description": "Channel Account Id",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "TenantToken",
+          "type": "string",
+          "description": "*from [getTokens](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "UserToken",
+          "type": "string",
+          "description": "*from [getTokens](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        }
+      ],
+      "response_fields": [],
+      "source_file": "synconlinesale.html"
+    },
+    "synconlinesales": {
+      "title": "/syncOnlineSales",
+      "method": "post",
+      "url": "/syncOnlineSales",
+      "category": "sales",
+      "description": "",
+      "parameters": [
+        {
+          "name": "Sales",
+          "type": "array_object",
+          "description": "List of sales to sync. **100 sales max**",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Sales.MarketplaceId",
+          "type": "string",
+          "description": "Add a distinct marketplace ID to your sale.",
+          "required": false,
+          "default": "OrderId String"
+        },
+        {
+          "name": "Sales.OrderId",
+          "type": "string",
+          "description": "The order ID. After order is synced it's status can be retrieved by the same ID. NOTE: You can create AND update sales that do not originate from the API if you provide the full SkuVault Sale ID in this parameter. In other words, if a sale originated from Magento, you can update it in the API if you provide the full SkuVault Sale ID.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Sales.OrderDateUtc",
+          "type": "datetime",
+          "description": "The UTC date and time order was created.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Sales.OrderTotal",
+          "type": "double",
+          "description": "Total order price. Can be different than the sum sale price of sold SKUs.",
+          "required": false,
+          "default": "0"
+        },
+        {
+          "name": "Sales.CheckoutStatus",
+          "type": "string",
+          "description": "[View guide](doc:sale-status-guide). One of: NotVisited, Visited, OnHold, Completed, CompletedOffline, Cancelled",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Sales.PaymentStatus",
+          "type": "string",
+          "description": "[View guide](doc:sale-status-guide). One of: NotSubmitted, Submitted, Deposited, Cleared, Failed",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Sales.Notes",
+          "type": "string",
+          "description": "Sale notes associated with this order.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Sales.SaleState",
+          "type": "string",
+          "description": "[View guide](doc:sale-status-guide). One of: Active, Cancelled, Archived",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Sales.AutoRemoveInfo",
+          "type": "object",
+          "description": "Picks against a sale when sale is marked as \"Completed\".",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Sales.AutoRemoveInfo.AutoRemove",
+          "type": "boolean",
+          "description": "Accepts either \"true\" or \"false\". *Note:* AutoRemove as an account setting is global, so even with a value of \"false\" the system will still attempt to pick sale items.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Sales.AutoRemoveInfo.WarehouseCode.Code",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Sales.AutoRemoveInfo.WarehouseName.Name",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Sales.ItemSkus",
+          "type": "array_object",
+          "description": "List of merchant-fulfilled items in the order. Required only if FulfilledItems is missing.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Sales.ItemSkus.Sku",
+          "type": "string",
+          "description": "The SKU sold.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Sales.ItemSkus.Quantity",
+          "type": "int",
+          "description": "The sold quantity.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Sales.ItemSkus.UnitPrice",
+          "type": "double",
+          "description": "The sold unit price.",
+          "required": false,
+          "default": "0"
+        },
+        {
+          "name": "Sales.FulfilledItems",
+          "type": "array_object",
+          "description": "List of 3PL/FBA-fulfilled items in the order.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Sales.FulfilledItems.Sku",
+          "type": "string",
+          "description": "The SKU of the sold 3PL/FBA fulfilled item.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Sales.FulfilledItems.Quantity",
+          "type": "int",
+          "description": "The quantity of the sold 3PL fulfilled item.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Sales.FulfilledItems.UnitPrice",
+          "type": "double",
+          "description": "The unit price of the sold 3PL fulfilled item.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Sales.ShippingInfo",
+          "type": "object",
+          "description": "Shipping information about sale, such as shipped status, carrier, class, and destination.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Sales.ShippingInfo.ShippingStatus",
+          "type": "string",
+          "description": "[View guide](doc:sale-status-guide). One of: Unshipped, PendingShipment, PartiallyShipped, Shipped",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Sales.ShippingInfo.ShippingCarrier",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Sales.ShippingInfo.ShippingClass",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Sales.ShippingInfo.FirstName",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Sales.ShippingInfo.LastName",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Sales.ShippingInfo.CompanyName",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Sales.ShippingInfo.PhoneNumber",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Sales.ShippingInfo.Email",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Sales.ShippingInfo.Line1",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Sales.ShippingInfo.Line2",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Sales.ShippingInfo.City",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Sales.ShippingInfo.Region",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Sales.ShippingInfo.Postal",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Sales.ShippingInfo.Country",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "ChannelType",
+          "type": "string",
+          "description": "Channel Type",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "ChannelAccountId",
+          "type": "long",
+          "description": "Channel Account Id",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "TenantToken",
+          "type": "string",
+          "description": "*from [getTokens](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "UserToken",
+          "type": "string",
+          "description": "*from [getTokens](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        }
+      ],
+      "response_fields": [],
+      "source_file": "synconlinesales.html"
+    },
+    "syncshippedsaleandremoveitems": {
+      "title": "/syncShippedSaleAndRemoveItems",
+      "method": "post",
+      "url": "/syncShippedSaleAndRemoveItems",
+      "category": "products",
+      "description": "",
+      "parameters": [
+        {
+          "name": "OrderId",
+          "type": "string",
+          "description": "The order ID. After order is synced it's status can be retrieved by the same ID. NOTE: You can create AND update sales that do not originate from the API if you provide the full SkuVault Sale ID in this parameter. In other words, if a sale originated from Magento, you can update it in the API if you provide the full SkuVault Sale ID.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "WarehouseId",
+          "type": "int",
+          "description": "The warehouse to Remove quantity from. If not included then the item will be removed from the first location in alphanumerical order across all warehouses.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "OrderDateUtc",
+          "type": "datetime",
+          "description": "The UTC date and time order was created.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "OrderTotal",
+          "type": "double",
+          "description": "Total order price. Can be different than the sum sale price of sold SKUs.",
+          "required": false,
+          "default": "0"
+        },
+        {
+          "name": "Notes",
+          "type": "string",
+          "description": "Sale notes associated with this order.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "ItemSkus",
+          "type": "array_object",
+          "description": "List of merchant-fulfilled items in the order. Required only if FulfilledItems is missing.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "ItemSkus.Sku",
+          "type": "string",
+          "description": "The SKU sold.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "ItemSkus.Quantity",
+          "type": "int",
+          "description": "The sold quantity.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "ItemSkus.UnitPrice",
+          "type": "double",
+          "description": "The sold unit price.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "FulfilledItems",
+          "type": "array_object",
+          "description": "List of 3PL-fulfilled items in the order.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "FulfilledItems.Sku",
+          "type": "string",
+          "description": "The SKU sold.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "FulfilledItems.Quantity",
+          "type": "int",
+          "description": "The sold quantity.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "FulfilledItems.UnitPrice",
+          "type": "double",
+          "description": "The sold unit price.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "ShippingInfo",
+          "type": "object",
+          "description": "Shipping information about sale, such as shipped status, carrier, class, and destination.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "ShippingInfo.ShippingStatus",
+          "type": "string",
+          "description": "One of: Unshipped, PendingShipment, PartiallyShipped, Shipped",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "ShippingInfo.ShippingCarrier",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "ShippingInfo.ShippingClass",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "ShippingInfo.FirstName",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "ShippingInfo.LastName",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "ShippingInfo.CompanyName",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "ShippingInfo.PhoneNumber",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "ShippingInfo.Email",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "ShippingInfo.Line1",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "ShippingInfo.Line2",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "ShippingInfo.City",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "ShippingInfo.Region",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "ShippingInfo.Postal",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "ShippingInfo.Country",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "TenantToken",
+          "type": "string",
+          "description": "*from [getTokens](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "UserToken",
+          "type": "string",
+          "description": "*from [getTokens](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        }
+      ],
+      "response_fields": [],
+      "source_file": "syncshippedsaleandremoveitems.html"
+    },
+    "syncshippedsaleandremoveitemsbulk": {
+      "title": "/syncShippedSaleAndRemoveItemsBulk",
+      "method": "post",
+      "url": "/syncShippedSaleAndRemoveItems/bulk",
+      "category": "products",
+      "description": "",
+      "parameters": [
+        {
+          "name": "Sales",
+          "type": "array_object",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Sales.OrderId",
+          "type": "string",
+          "description": "The order ID. After order is synced it's status can be retrieved by the same ID. NOTE: You can create AND update sales that do not originate from the API if you provide the full SkuVault Sale ID in this parameter. In other words, if a sale originated from Magento, you can update it in the API if you provide the full SkuVault Sale ID.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Sales.WarehouseId",
+          "type": "int",
+          "description": "The warehouse to Remove ItemSku inventory from.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Sales.OrderDateUtc",
+          "type": "datetime",
+          "description": "The UTC date and time order was created.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Sales.OrderTotal",
+          "type": "double",
+          "description": "Total order price. Can be different than the sum sale price of sold SKUs.",
+          "required": false,
+          "default": "0"
+        },
+        {
+          "name": "Sales.Notes",
+          "type": "string",
+          "description": "Sale notes associated with this order.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Sales.ItemSkus",
+          "type": "array_object",
+          "description": "List of merchant-fulfilled items in the order. Required only if FulfilledItems is missing.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Sales.ItemSkus.Sku",
+          "type": "string",
+          "description": "The SKU sold.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Sales.ItemSkus.Quantity",
+          "type": "int",
+          "description": "The sold quantity.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Sales.ItemSkus.UnitPrice",
+          "type": "double",
+          "description": "The sold unit price.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Sales.FulfilledItems",
+          "type": "array_object",
+          "description": "List of 3PL-fulfilled items in the order. Required if there are no ItemSkus. FulfilledItems inventory will not be deducted in SkuVault.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Sales.FulfilledItems.Sku",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Sales.FulfilledItems.Quantity",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Sales.FulfilledItems.UnitPrice",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Sales.ShippingInfo",
+          "type": "object",
+          "description": "Shipping information about sale, such as shipped status, carrier, class, and destination.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Sales.ShippingInfo.ShippingCarrier",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Sales.ShippingInfo.ShippingClass",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Sales.ShippingInfo.FirstName",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Sales.ShippingInfo.LastName",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Sales.ShippingInfo.CompanyName",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Sales.ShippingInfo.PhoneNumber",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Sales.ShippingInfo.Email",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Sales.ShippingInfo.Line1",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Sales.ShippingInfo.Line2",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Sales.ShippingInfo.City",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Sales.ShippingInfo.Region",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Sales.ShippingInfo.Postal",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Sales.ShippingInfo.Country",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "TenantToken",
+          "type": "string",
+          "description": "*from [getTokens](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "UserToken",
+          "type": "string",
+          "description": "*from [getTokens](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        }
+      ],
+      "response_fields": [],
+      "source_file": "syncshippedsaleandremoveitemsbulk.html"
+    },
+    "updatealtskuscodes": {
+      "title": "/updateAltSKUsCodes",
+      "method": "post",
+      "url": "/updateAltSKUsCodes",
+      "category": "products",
+      "description": "",
+      "parameters": [
+        {
+          "name": "Action",
+          "type": "string",
+          "description": "Value can be 'Add', 'Delete', or 'Update'. 'Add' and 'Delete' will only modify a products' Alternates with those specified in the call. 'Update' will overwrite a products' Alternates with the Codes/SKUs provided.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Items",
+          "type": "array_object",
+          "description": "Max of 100 items per call.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Items.Sku",
+          "type": "string",
+          "description": "SKU of the product to update.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Items.AltSKUs",
+          "type": "array_string",
+          "description": "Alternate SKUs to add, remove, or update the products' Alternates with.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Items.AltCodes",
+          "type": "array_string",
+          "description": "Alternate Codes to add, remove, or update the products' Alternates with.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "TenantToken",
+          "type": "string",
+          "description": "*from [getTokens.](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "UserToken",
+          "type": "string",
+          "description": "*from [getTokens.](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        }
+      ],
+      "response_fields": [],
+      "source_file": "updatealtskuscodes.html"
+    },
+    "updatehandlingtime": {
+      "title": "/updateHandlingTime",
+      "method": "post",
+      "url": "/updateHandlingTime",
+      "category": "general",
+      "description": "",
+      "parameters": [
+        {
+          "name": "Items",
+          "type": "array_object",
+          "description": "List of SKUs to update, max 500 per call.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Items.Sku",
+          "type": "string",
+          "description": "The SKU you wish to update.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Items.Sku.HandlingTime",
+          "type": "array_object",
+          "description": "For the given SKU, the accounts and handling times.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Items.Sku.HandlingTime.AccountId",
+          "type": "string",
+          "description": "The channel account ID acquired from [/getIntegrations](getintegrations) request",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Items.Sku.HandlingTime.Quantity",
+          "type": "int",
+          "description": "Between 1 and 30, the number of days it takes to fulfill this SKU.",
+          "required": true,
+          "default": "1"
+        },
+        {
+          "name": "TenantToken",
+          "type": "string",
+          "description": "*from [getTokens.](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "UserToken",
+          "type": "string",
+          "description": "*from [getTokens.](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        }
+      ],
+      "response_fields": [],
+      "source_file": "updatehandlingtime.html"
+    },
+    "updateonlinesalestatus": {
+      "title": "/updateOnlineSaleStatus",
+      "method": "post",
+      "url": "/updateOnlineSaleStatus",
+      "category": "sales",
+      "description": "",
+      "parameters": [
+        {
+          "name": "SaleId",
+          "type": "string",
+          "description": "The full SkuVault Sale ID to be updated. NOTE: You can either use SaleID or OrderID. You cannot use both of them.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "OrderId",
+          "type": "string",
+          "description": "The Order ID (not full SkuVault Sale ID) of the order to be updated. NOTE: You can only use this parameter for sales created via the API. If you want to change sale status for sales that did not originate from the API, you must use the 'SaleID' parameter.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Status",
+          "type": "string",
+          "description": "One of: Pending, ReadyToShip, Completed, Cancelled, Invalid, ShippedUnpaid",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "TenantToken",
+          "type": "string",
+          "description": "*from [getTokens](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "UserToken",
+          "type": "string",
+          "description": "*from [getTokens](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        }
+      ],
+      "response_fields": [],
+      "source_file": "updateonlinesalestatus.html"
+    },
+    "updatepos": {
+      "title": "/updatePOs",
+      "method": "post",
+      "url": "/updatePOs",
+      "category": "purchasing",
+      "description": "",
+      "parameters": [
+        {
+          "name": "PurchaseOrderId",
+          "type": "long",
+          "description": "Purchase Order Id",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "SupplierName",
+          "type": "string",
+          "description": "Supplier Name",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "LineItems",
+          "type": "array_object",
+          "description": "Line Items",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "LineItems.SKU",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "LineItems.Quantity",
+          "type": "int",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "LineItems.QuantityTo3PL",
+          "type": "int",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "LineItems.Cost",
+          "type": "double",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "LineItems.PrivateNotes",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "LineItems.PublicNotes",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "LineItems.Variant",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "LineItems.Identifier",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Status",
+          "type": "string",
+          "description": "Purchase Order Status",
+          "required": false,
+          "default": "PoStatusEnum?"
+        },
+        {
+          "name": "PoNumber",
+          "type": "string",
+          "description": "PO Number",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "OrderDate",
+          "type": "datetime",
+          "description": "Order Date",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "OrderCancelDate",
+          "type": "datetime",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "ArrivalDueDate",
+          "type": "datetime",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "RequestedShipDate",
+          "type": "datetime",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "ActualShippedDate",
+          "type": "datetime",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "TrackingInfo",
+          "type": "string",
+          "description": "Tracking Info",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "PublicNotes",
+          "type": "string",
+          "description": "Public Notes",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "PrivateNotes",
+          "type": "string",
+          "description": "Private Notes",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "TermsName",
+          "type": "string",
+          "description": "Terms Name",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "ShipToWarehouse",
+          "type": "string",
+          "description": "Ship to Warehouse",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "ShipToAddress",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "ShippingCarrierClass",
+          "type": "object",
+          "description": "Shipping Carrier Class",
+          "required": false,
+          "default": "false"
+        },
+        {
+          "name": "ShippingCarrierClass.CarrierName",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "ShippingCarrierClass.ClassName",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Payments",
+          "type": "array_object",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Payments.PaymentName",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Payments.Amount",
+          "type": "double",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Payments.Note",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "SentStatus",
+          "type": "string",
+          "description": "Sent Status - NotSent, Sent, and NeedToResend (defaults to NotSent)",
+          "required": false,
+          "default": "PoSentStatusEnum?"
+        },
+        {
+          "name": "PaymentStatus",
+          "type": "string",
+          "description": "Payment Status - NonePaid, PartiallyPaid, and FullyPaid (defaults to NonePaid)",
+          "required": false,
+          "default": "PoPaymentStatusEnum?"
+        }
+      ],
+      "response_fields": [],
+      "source_file": "updatepos.html"
+    },
+    "updateproduct": {
+      "title": "/updateProduct",
+      "method": "post",
+      "url": "/updateProduct",
+      "category": "products",
+      "description": "",
+      "parameters": [
+        {
+          "name": "Sku",
+          "type": "string",
+          "description": "The SKU you wish to update.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Description",
+          "type": "string",
+          "description": "Equals \"Title\" inside SkuVault UI.",
+          "required": false,
+          "default": "null"
+        },
+        {
+          "name": "ShortDescription",
+          "type": "string",
+          "description": "Limit 1000 characters",
+          "required": false,
+          "default": "null"
+        },
+        {
+          "name": "LongDescription",
+          "type": "string",
+          "description": "Limit 65665 characters.",
+          "required": false,
+          "default": "null"
+        },
+        {
+          "name": "Classification",
+          "type": "string",
+          "description": "Must exist in SkuVault.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Supplier",
+          "type": "string",
+          "description": "Primary Supplier for the product. Additional supplier information will show in the SupplierInfo array.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Brand",
+          "type": "string",
+          "description": "Must exist in SkuVault.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Code",
+          "type": "string",
+          "description": "Barcode number.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "PartNumber",
+          "type": "string",
+          "description": "Manufacturer part number.",
+          "required": false,
+          "default": "null"
+        },
+        {
+          "name": "Cost",
+          "type": "double",
+          "description": "Accepts decimal; Your overall cost on hand for that product. Used for a default (fallback) cost field or for the cost averaging feature in SkuVault.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "SalePrice",
+          "type": "double",
+          "description": "Accepts decimal; Your selling price per unit",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "RetailPrice",
+          "type": "double",
+          "description": "Accepts decimal; MSRP per unit",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Weight",
+          "type": "double",
+          "description": "Accepts decimal",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "WeightUnit",
+          "type": "string",
+          "description": "One of: \"lbs\", \"kgs\", \"oz\", \"g\"",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "VariationParentSku",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "ReorderPoint",
+          "type": "int",
+          "description": "The point at which you should reorder quantity.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "MinimumOrderQuantity",
+          "type": "int",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "MinimumOrderQuantityInfo",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Note",
+          "type": "string",
+          "description": "The note to place o the product.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Statuses",
+          "type": "array_string",
+          "description": "List of statuses on the product.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Pictures",
+          "type": "array_string",
+          "description": "List of picture urls",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Attributes",
+          "type": "object",
+          "description": "Dictionary where key is attribute name and value is attribute value. NOTE: If you want to update attributes, please include the Classification value as well.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "SupplierInfo",
+          "type": "array_object",
+          "description": "Array that houses supplier information. This array isn't required, but if you include it, you must specify at least 1 supplier as primary.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "SupplierInfo.Cost",
+          "type": "double",
+          "description": "This is the supplier's cost for that item.",
+          "required": false,
+          "default": "0"
+        },
+        {
+          "name": "SupplierInfo.LeadTime",
+          "type": "int",
+          "description": "Supplier's lead time.",
+          "required": false,
+          "default": "0"
+        },
+        {
+          "name": "SupplierInfo.isPrimary",
+          "type": "boolean",
+          "description": "At least 1 supplier must be specified as primary (true).",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "SupplierInfo.SupplierName",
+          "type": "string",
+          "description": "The name of your supplier in SkuVault. It must exist in SkuVault and at least one supplier is required.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "SupplierInfo.SupplierPartNumber",
+          "type": "string",
+          "description": "Supplier's part number.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "SupplierInfo.isActive",
+          "type": "boolean",
+          "description": "If a supplier is active, we will use the supplier information (Cost, Supplier Part Number, etc.) when creating a Purchase Order.",
+          "required": false,
+          "default": "false"
+        },
+        {
+          "name": "TenantToken",
+          "type": "string",
+          "description": "*from [getTokens.](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "UserToken",
+          "type": "string",
+          "description": "*from [getTokens.](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Client",
+          "type": "string",
+          "description": "Only active clients, must exists in UI",
+          "required": false,
+          "default": ""
+        }
+      ],
+      "response_fields": [],
+      "source_file": "updateproduct.html"
+    },
+    "updateproducts": {
+      "title": "/updateProducts",
+      "method": "post",
+      "url": "/updateProducts",
+      "category": "products",
+      "description": "",
+      "parameters": [
+        {
+          "name": "Items",
+          "type": "array_object",
+          "description": "List of products to update. ***100 max.***",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Items.Sku",
+          "type": "string",
+          "description": "The SKU you wish to update.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Items.Description",
+          "type": "string",
+          "description": "Equals \"Title\" inside SkuVault UI.",
+          "required": false,
+          "default": "null"
+        },
+        {
+          "name": "Items.ShortDescription",
+          "type": "string",
+          "description": "Limit 1000 characters",
+          "required": false,
+          "default": "null"
+        },
+        {
+          "name": "Items.LongDescription",
+          "type": "string",
+          "description": "Limit 65665 characters.",
+          "required": false,
+          "default": "null"
+        },
+        {
+          "name": "Items.Classification",
+          "type": "string",
+          "description": "If provided, classification must exist in SkuVault.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Items.Supplier",
+          "type": "string",
+          "description": "Primary Supplier for the product.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Items.Brand",
+          "type": "string",
+          "description": "If provided, brand must exist in SkuVault.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Items.Code",
+          "type": "string",
+          "description": "Barcode number.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Items.PartNumber",
+          "type": "string",
+          "description": "Manufacturer part number.",
+          "required": false,
+          "default": "null"
+        },
+        {
+          "name": "Items.Cost",
+          "type": "double",
+          "description": "Accepts decimal; Your overall cost on hand for that product. Used for a default (fallback) cost field or for the cost averaging feature in SkuVault.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Items.SalePrice",
+          "type": "double",
+          "description": "Accepts decimal; Your selling price per unit",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Items.RetailPrice",
+          "type": "double",
+          "description": "Accepts decimal; MSRP per unit",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Items.Weight",
+          "type": "double",
+          "description": "Accepts decimal",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Items.WeightUnit",
+          "type": "string",
+          "description": "One of: \"lbs\", \"kgs\", \"oz\", \"g\"",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Items.VariationParentSku",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Items.ReorderPoint",
+          "type": "int",
+          "description": "The point at which you should reorder quantity.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Items.MinimumOrderQuantity",
+          "type": "int",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Items.MinimumOrderQuantityInfo",
+          "type": "string",
+          "description": "",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Items.Note",
+          "type": "string",
+          "description": "The note to place o the product.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Items.Statuses",
+          "type": "array_string",
+          "description": "List of statuses on the product.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Items.Pictures",
+          "type": "array_string",
+          "description": "List of picture urls",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Items.Attributes",
+          "type": "object",
+          "description": "Dictionary list where name of attribute is key(AttributeName), value of attribute as value(AttributeValue). NOTE: If you want to update attributes, please include the Classification value as well.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Items.SupplierInfo",
+          "type": "array_object",
+          "description": "Array that houses supplier information. This array isn't required, but if you include it, you must specify at least 1 supplier as primary.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Items.SupplierInfo.SupplierName",
+          "type": "string",
+          "description": "The name of your supplier in SkuVault. It must exist in SkuVault and at least one supplier is required.",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Items.SupplierInfo.SupplierPartNumber",
+          "type": "string",
+          "description": "Supplier's part number.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Items.SupplierInfo.Cost",
+          "type": "double",
+          "description": "This is the supplier's cost for that item.",
+          "required": false,
+          "default": "0"
+        },
+        {
+          "name": "Items.SupplierInfo.LeadTime",
+          "type": "int",
+          "description": "Supplier's lead time.",
+          "required": false,
+          "default": "0"
+        },
+        {
+          "name": "Items.SupplierInfo.isActive",
+          "type": "boolean",
+          "description": "If true, will use this supplier information when creating a PO.",
+          "required": false,
+          "default": "false"
+        },
+        {
+          "name": "Items.SupplierInfo.isPrimary",
+          "type": "boolean",
+          "description": "Must have at least one primary supplier set to *true*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "TenantToken",
+          "type": "string",
+          "description": "*from [getTokens.](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "UserToken",
+          "type": "string",
+          "description": "*from [getTokens.](doc:gettokens)*",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "Client",
+          "type": "string",
+          "description": "Only active clients, must exists in UI",
+          "required": false,
+          "default": ""
+        }
+      ],
+      "response_fields": [],
+      "source_file": "updateproducts.html"
+    },
+    "updateshipments": {
+      "title": "/updateShipments",
+      "method": "post",
+      "url": "/updateShipments",
+      "category": "sales",
+      "description": "",
+      "parameters": [
+        {
+          "name": "Shipments",
+          "type": "array_object",
+          "description": "Shipments",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "SaleIds",
+          "type": "string",
+          "description": "List of Sale IDs.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Shipments.TrackingNumber",
+          "type": "string",
+          "description": "The tracking number associated with the shipment. This parameter cannot be updated.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Shipments.Carrier",
+          "type": "string",
+          "description": "Shipping company responsible for taking the delivery from Point A to Point B. This parameter cannot be updated.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Shipments.Status",
+          "type": "string",
+          "description": "The Status of a shipment if a tracking number has been assigned by the carrier.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Shipments.LandedCosts",
+          "type": "array_object",
+          "description": "Landed Cost is how much of the total cost a line item is responsible for.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Shipments.LandedCosts.Sku",
+          "type": "string",
+          "description": "Sku associated with Landed cost.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Shipments.LandedCosts.Amount",
+          "type": "double",
+          "description": "Amount value of Landed Cost. Accepts decimals.",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "Shipments.LandedCosts.CurrencyIsoCode",
+          "type": "string",
+          "description": "Type of Currency",
+          "required": false,
+          "default": ""
+        },
+        {
+          "name": "TenantToken",
+          "type": "string",
+          "description": "Tenant Token to access account",
+          "required": true,
+          "default": ""
+        },
+        {
+          "name": "UserToken",
+          "type": "string",
+          "description": "User Token",
+          "required": true,
+          "default": ""
+        }
+      ],
+      "response_fields": [],
+      "source_file": "updateshipments.html"
+    }
+  }
+}
